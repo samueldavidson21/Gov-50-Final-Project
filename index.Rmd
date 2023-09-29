@@ -11,4 +11,7 @@ output:
 
 ## Project thoughts
 
-I am interested in exploring data related to...
+I am interested in exploring data related to housing policy in New York City and the work of the rent guidelines board especially as it relates to a dearth of data on tenants.  
+Other things that could be interesting:
+- Taiwan/China tensions and datasets of online reactions
+- Something with rowing?
