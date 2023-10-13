@@ -7,11 +7,35 @@ output:
     self_contained: false
 ---
 
+##Data source
 
+My dataset is the CDC's National Survey of Family Growth (NSFG), conducted between 2017 and 2019. The specific data I'm looking at is an independent sample of men aged 15-49. 
 
-## Project thoughts
+##Idea/research question
 
-I am interested in exploring data related to housing policy in New York City and the work of the rent guidelines board especially as it relates to a dearth of data on tenants.  
-Other things that could be interesting:
-- Taiwan/China tensions and datasets of online reactions
-- Something with rowing?
+I am interested in looking at non-coresidential father involvement in their children's lives, I want to then see how different factors such as educational attainment, income, and former marital status impacts that involvement. I will have to aggregate several different measures of child involvement present in the survey in order to have one single dependent variable. 
+
+##Hypothesis
+
+I think that non-coresidential fathers who were previously married would be more involved in their children's lives than fathers who were never married, because they would potentially have a closer or better relationship with their ex. I am interested in seeing if this effect is different across different income spectrums, however. 
+
+## Variable Notes
+
+CDC codebook on fathering: https://www.cdc.gov/nchs/data/nsfg/2017-2019_NSFG_Male_SectionG_Codebook-508.pdf
+
+Variables of interest for coresidential focal child: (pages 1-12)
+- ROUTG04: In the last four weeks, how often did you
+Spend time with [NAME OF CORESIDENTIAL FOCAL CHILD] on an outing away from home to places such as
+museums, zoos, movies, sports, playground, park, etc.?
+- RMEAL04: (In the last four weeks, how often did you... )
+Eat evening meals together with [NAME OF CORESIDENTIAL FOCAL CHILD]?
+- And also: RERRAND04, RPLAY04, RREAD04, RAFFECT04, RPRAISE04, RFEED04,RBATH04, RDIAPER04, RBED04, RAPPT04
+- And those variables ending in 518, which signifies a coresidential focal child between 5-18 years of age. 
+
+For non-residential focal child:
+- NRVISIT04, NRSATVIS04, NROUTG04, etc. (pages 13-24)
+- NRVISITG518, etc.
+
+Codebook on Former Wives and First Cohabiting Partner: https://www.cdc.gov/nchs/data/nsfg/2017-2019_NSFG_Male_SectionE_Codebook-508.pdf
+
+Never married variable: nformwife

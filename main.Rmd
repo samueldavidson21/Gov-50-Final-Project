@@ -4,6 +4,12 @@ output: html_document
 date: "2023-10-12"
 ---
 
+Notes:
+- WGT2017_2019 is the weights
+- This is a pdf explaining: https://www.cdc.gov/nchs/data/nsfg/NSFG-2017-2019-UG-MainText-508.pdf
+- Could combine 2011-2019
+
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
@@ -15,6 +21,10 @@ men <- read_csv("data/csv_2017_2019_Male.csv")
 
 ```
 ```{r}
-new_men <- na.omit(men)
+
+sex_graph <- men |> mutate(sex_yes = ifelse(hadsex == "YES, R EVER HAD INTERCOURSE", 1, 0))|>group_by(AGE_R) |>  summarize(sex_prop = mean(sex_yes, na.rm = TRUE))
+
+ggplot(sex_graph, aes(x=AGE_R, y= sex_prop)) + geom_col()
+
 ```
 
