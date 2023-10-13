@@ -20,6 +20,16 @@ library(tidyverse)
 men <- read_csv("data/csv_2017_2019_Male.csv")
 
 ```
+
+```{r}
+#ncall is number of coresidential children
+
+men |> filter(nformwife != 0)
+#|> summarize(mean_meal = mean(RMEAL04, na.rm = TRUE))
+
+```
+
+
 ```{r}
 
 sex_graph <- men |> mutate(sex_yes = ifelse(hadsex == "YES, R EVER HAD INTERCOURSE", 1, 0))|>group_by(AGE_R) |>  summarize(sex_prop = mean(sex_yes, na.rm = TRUE))

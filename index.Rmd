@@ -39,3 +39,7 @@ For non-residential focal child:
 Codebook on Former Wives and First Cohabiting Partner: https://www.cdc.gov/nchs/data/nsfg/2017-2019_NSFG_Male_SectionE_Codebook-508.pdf
 
 Never married variable: nformwife
+
+Other interesting:
+- How did the marriage end: MARREND4 (first former wife) --> MARREND7 (fourth former wife)
+
