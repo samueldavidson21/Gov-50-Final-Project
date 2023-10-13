@@ -23,8 +23,10 @@ men <- read_csv("data/csv_2017_2019_Male.csv")
 
 ```{r}
 #ncall is number of coresidential children
+#need to see if men are currently married as well, and to which of their wives the kids belong
 
-men |> filter(nformwife != 0)
+
+men |> mutate(form_wife_num = casewhen())
 #|> summarize(mean_meal = mean(RMEAL04, na.rm = TRUE))
 
 ```

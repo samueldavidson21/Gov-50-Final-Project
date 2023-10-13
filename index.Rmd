@@ -1,25 +1,25 @@
 ---
 title: "Gov 50 Final Project"
-author: "Your Name Here"
+author: "Sam Davidson"
 description: "My final project"
 output:
   distill::distill_article:
     self_contained: false
 ---
 
-##Data source
+# Data Source
 
 My dataset is the CDC's National Survey of Family Growth (NSFG), conducted between 2017 and 2019. The specific data I'm looking at is an independent sample of men aged 15-49. 
 
-##Idea/research question
+# Research Question
 
 I am interested in looking at non-coresidential father involvement in their children's lives, I want to then see how different factors such as educational attainment, income, and former marital status impacts that involvement. I will have to aggregate several different measures of child involvement present in the survey in order to have one single dependent variable. 
 
-##Hypothesis
+# Hypothesis
 
 I think that non-coresidential fathers who were previously married would be more involved in their children's lives than fathers who were never married, because they would potentially have a closer or better relationship with their ex. I am interested in seeing if this effect is different across different income spectrums, however. 
 
-## Variable Notes
+# Variable Notes
 
 CDC codebook on fathering: https://www.cdc.gov/nchs/data/nsfg/2017-2019_NSFG_Male_SectionG_Codebook-508.pdf
 
