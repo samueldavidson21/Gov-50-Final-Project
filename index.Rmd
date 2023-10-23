@@ -9,7 +9,7 @@ output:
 
 #Milestone 3: Data Visualization
 
-```{r fig.height = 5, fig.width = 15}
+```{r fig.height = 5, fig.width = 15, echo=FALSE}
 library(tidyverse)
 men <- read_csv("data/csv_2017_2019_Male.csv")
 men |> filter(ncall != "none") |> group_by(marstat) |> summarize(cur_mar = n()) |> ggplot(aes(y=marstat, x=cur_mar)) + geom_col() + labs(title = "Distribution of current marriage status among fathers reporting at least 1 non-coresidential child", x = "Count", y = "Marriage Status")
