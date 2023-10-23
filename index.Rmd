@@ -7,6 +7,14 @@ output:
     self_contained: false
 ---
 
+#Milestone 3: Data Visualization
+
+```{r fig.height = 5, fig.width = 15}
+library(tidyverse)
+men <- read_csv("data/csv_2017_2019_Male.csv")
+men |> filter(ncall != "none") |> group_by(marstat) |> summarize(cur_mar = n()) |> ggplot(aes(y=marstat, x=cur_mar)) + geom_col() + labs(title = "Distribution of current marriage status among fathers reporting at least 1 non-coresidential child", x = "Count", y = "Marriage Status")
+
+```
 # Data Source
 
 My dataset is the CDC's National Survey of Family Growth (NSFG), conducted between 2017 and 2019. The specific data I'm looking at is an independent sample of men aged 15-49. 
@@ -42,4 +50,9 @@ Never married variable: nformwife
 
 Other interesting:
 - How did the marriage end: MARREND4 (first former wife) --> MARREND7 (fourth former wife)
+
+Complications:
+- There are overlaps between non-coresidential and coresidential fathers. 
+- There are not just never married or divorced non-coresidential fathers. There are also fathers who are still married - the challenge is to disaggregate 
+
 

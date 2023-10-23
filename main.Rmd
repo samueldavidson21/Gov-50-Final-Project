@@ -20,14 +20,36 @@ library(tidyverse)
 men <- read_csv("data/csv_2017_2019_Male.csv")
 
 ```
+#demographic mapping
+```{r}
+men |> group_by(nformwife) |> filter(nformwife != "NA" & nformwife != "none") |> summarize(form_wives = n()) |>
+  ggplot(aes(x=nformwife, y=form_wives)) + geom_col()
+
+```
+
+#is there any overlap between coresidential and non-coresidental fathers? - yes - 183 of them.
+#what can we learn about non-coresidential fathers? - avg age 36.75 - similar 
+
+```{r}
+#men |> filter(ncall != "none" & crall != "none") |> select(rscrage, ncall, crall)
+
+men |> filter(ncall != "none") |> group_by(ncall) |> summarize(n_kids = n())
+men |> filter(ncall != "none") |> mutate(num_age = as.numeric(gsub("[^0-9]", "", AGE_A))) |> summarize(avg_age = mean(num_age, na.rm = TRUE))
+men |> filter(ncall != "none") |> group_by(marstat) |> summarize(cur_mar = n()) |> ggplot(aes(y=marstat, x=cur_mar)) + geom_col()
+
+
+```
+
+
 
 ```{r}
 #ncall is number of coresidential children
 #need to see if men are currently married as well, and to which of their wives the kids belong
 
 
-men |> mutate(form_wife_num = casewhen())
-#|> summarize(mean_meal = mean(RMEAL04, na.rm = TRUE))
+men |> mutate(form_wife_bool = ifelse(nformwife == "none", 0, 1), meal_scale = case_when(NRMEAL04 == "Not at all" ~ 1, NRMEAL04 == "Less than once a week" ~ 2, NRMEAL04 == "About once a week" ~ 3, NRMEAL04 == "Several times a week " ~ 4,NRMEAL04 == "Every day (at least once a day)" ~ 5)) |> group_by(form_wife_bool) |> summarize(mean_meal = mean(meal_scale, na.rm = TRUE))
+
+
 
 ```
 
