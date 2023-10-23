@@ -7,7 +7,7 @@ output:
     self_contained: false
 ---
 
-#Milestone 3: Data Visualization
+# Milestone 3: Data Visualization
 
 ```{r fig.height = 5, fig.width = 15, echo=FALSE}
 library(tidyverse)
