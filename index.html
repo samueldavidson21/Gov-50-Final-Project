@@ -115,7 +115,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <!--/radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-resource-manifest">
-  {"type":"character","attributes":{},"value":["data/csv_2017_2019_Male.csv","index_files/anchor-4.2.2/anchor.min.js","index_files/bowser-1.9.3/bowser.min.js","index_files/distill-2.2.21/template.v2.js","index_files/figure-html5/unnamed-chunk-1-1.png","index_files/header-attrs-2.17/header-attrs.js","index_files/header-attrs-2.24/header-attrs.js","index_files/jquery-3.6.0/jquery-3.6.0.js","index_files/jquery-3.6.0/jquery-3.6.0.min.js","index_files/jquery-3.6.0/jquery-3.6.0.min.map","index_files/popper-2.6.0/popper.min.js","index_files/tippy-6.2.7/tippy-bundle.umd.min.js","index_files/tippy-6.2.7/tippy-light-border.css","index_files/tippy-6.2.7/tippy.css","index_files/tippy-6.2.7/tippy.umd.min.js","index_files/webcomponents-2.0.0/webcomponents.js"]}
+  {"type":"character","attributes":{},"value":["data/csv_2017_2019_Male.csv","index_files/anchor-4.2.2/anchor.min.js","index_files/bowser-1.9.3/bowser.min.js","index_files/distill-2.2.21/template.v2.js","index_files/figure-html5/unnamed-chunk-1-1.png","index_files/figure-html5/unnamed-chunk-2-1.png","index_files/header-attrs-2.17/header-attrs.js","index_files/header-attrs-2.24/header-attrs.js","index_files/jquery-3.6.0/jquery-3.6.0.js","index_files/jquery-3.6.0/jquery-3.6.0.min.js","index_files/jquery-3.6.0/jquery-3.6.0.min.map","index_files/popper-2.6.0/popper.min.js","index_files/tippy-6.2.7/tippy-bundle.umd.min.js","index_files/tippy-6.2.7/tippy-light-border.css","index_files/tippy-6.2.7/tippy.css","index_files/tippy-6.2.7/tippy.umd.min.js","index_files/webcomponents-2.0.0/webcomponents.js"]}
   </script>
   <!--radix_placeholder_navigation_in_header-->
   <!--/radix_placeholder_navigation_in_header-->
@@ -1517,9 +1517,34 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </div>
 
 <div class="d-article">
+<h1 id="milestone-4-drilling-down-on-one-variable">Milestone 4: Drilling down on one variable</h1>
+<p>For this analysis, I want to use one variable that tracks non-coresidential parental engagement, number of visits per week, to approximate overall how engaged different groups of fathers are. I’m assuming that this variable will be correlated to other engagement variables such as number of meals or going to appointments with children. I am going to be looking at two different groups of fathers in particular, fathers that are divorced and fathers that never married. What we can see from this data is that fathers of children ages 0-4 who are divorced see their kids, on average, about 0.22 days fewer per week than fathers who never married, but fathers of children ages 5-18 who are divorced see their kids, on average, about 0.19 days more per week than fathers who never married. The effect of marriage status is different depending on the ages of the non-coresidential children.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='op'>)</span></span>
+<span><span class='va'>men</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://readr.tidyverse.org/reference/read_delim.html'>read_csv</a></span><span class='op'>(</span><span class='st'>"data/csv_2017_2019_Male.csv"</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>visit_04</span> <span class='op'>&lt;-</span> <span class='va'>men</span> <span class='op'>|&gt;</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>NRVISIT04</span> <span class='op'>!=</span> <span class='st'>"NA"</span> <span class='op'>&amp;</span> <span class='va'>NRVISIT04</span> <span class='op'>!=</span> <span class='st'>"Not ascertained"</span><span class='op'>)</span> <span class='op'>|&gt;</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>visit_bool_04 <span class='op'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/case_when.html'>case_when</a></span><span class='op'>(</span><span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"Not at all"</span> <span class='op'>~</span> <span class='fl'>0</span>, <span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"Less than once a week"</span> <span class='op'>~</span> <span class='fl'>0.5</span>, <span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"About once a week"</span> <span class='op'>~</span> <span class='fl'>1</span>, <span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"Several times a week"</span> <span class='op'>~</span> <span class='fl'>3</span>, <span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"Every day (at least once a day)"</span> <span class='op'>~</span> <span class='fl'>7</span><span class='op'>)</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>visit_518</span> <span class='op'>&lt;-</span> <span class='va'>men</span> <span class='op'>|&gt;</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>NRVISIT518</span> <span class='op'>!=</span> <span class='st'>"NA"</span> <span class='op'>&amp;</span> <span class='va'>NRVISIT518</span> <span class='op'>!=</span> <span class='st'>"Not ascertained"</span> <span class='op'>&amp;</span> <span class='va'>NRVISIT518</span> <span class='op'>!=</span> <span class='st'>"Don't know"</span><span class='op'>)</span> <span class='op'>|&gt;</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>visit_bool_518 <span class='op'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/case_when.html'>case_when</a></span><span class='op'>(</span><span class='va'>NRVISIT518</span> <span class='op'>==</span> <span class='st'>"Not at all"</span> <span class='op'>~</span> <span class='fl'>0</span>, <span class='va'>NRVISIT518</span> <span class='op'>==</span> <span class='st'>"Less than once a week"</span> <span class='op'>~</span> <span class='fl'>0.5</span>, <span class='va'>NRVISIT518</span> <span class='op'>==</span> <span class='st'>"About once a week"</span> <span class='op'>~</span> <span class='fl'>1</span>, <span class='va'>NRVISIT518</span> <span class='op'>==</span> <span class='st'>"Several times a week"</span> <span class='op'>~</span> <span class='fl'>3</span>, <span class='va'>NRVISIT518</span> <span class='op'>==</span> <span class='st'>"Every day (at least once a day)"</span> <span class='op'>~</span> <span class='fl'>7</span><span class='op'>)</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>ate_marriage_status_04</span> <span class='op'>&lt;-</span> <span class='va'>visit_04</span> <span class='op'>|&gt;</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='op'>(</span><span class='va'>marstat</span><span class='op'>)</span> <span class='op'>|&gt;</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/summarise.html'>summarize</a></span><span class='op'>(</span>avg_visits_04 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>visit_bool_04</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>|&gt;</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>marstat</span> <span class='op'>==</span> <span class='st'>"Divorced or annulled"</span> <span class='op'>|</span> <span class='va'>marstat</span> <span class='op'>==</span> <span class='st'>"Never been married"</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>ate_marriage_status_518</span> <span class='op'>&lt;-</span> <span class='va'>visit_518</span> <span class='op'>|&gt;</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='op'>(</span><span class='va'>marstat</span><span class='op'>)</span> <span class='op'>|&gt;</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/summarise.html'>summarize</a></span><span class='op'>(</span>avg_visits_518 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>visit_bool_518</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>|&gt;</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>marstat</span> <span class='op'>==</span> <span class='st'>"Divorced or annulled"</span> <span class='op'>|</span> <span class='va'>marstat</span> <span class='op'>==</span> <span class='st'>"Never been married"</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>ate_mar_total</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate-joins.html'>left_join</a></span><span class='op'>(</span><span class='va'>ate_marriage_status_04</span>, <span class='va'>ate_marriage_status_518</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>ate_mar_total</span></span></code></pre>
+</div>
+<pre><code># A tibble: 2 × 3
+  marstat              avg_visits_04 avg_visits_518
+  &lt;chr&gt;                        &lt;dbl&gt;          &lt;dbl&gt;
+1 Divorced or annulled          2.37           1.68
+2 Never been married            2.59           1.49</code></pre>
+</div>
 <h1 id="milestone-3-data-visualization">Milestone 3: Data Visualization</h1>
 <div class="layout-chunk" data-layout="l-body">
-<p><img src="index_files/figure-html5/unnamed-chunk-1-1.png" width="1440" /></p>
+<p><img src="index_files/figure-html5/unnamed-chunk-2-1.png" width="1440" /></p>
 </div>
 <h1 id="data-source">Data Source</h1>
 <p>My dataset is the CDC’s National Survey of Family Growth (NSFG), conducted between 2017 and 2019. The specific data I’m looking at is an independent sample of men aged 15-49.</p>
@@ -1543,11 +1568,12 @@ Eat evening meals together with [NAME OF CORESIDENTIAL FOCAL CHILD]?
 <p>Codebook on Former Wives and First Cohabiting Partner: <a href="https://www.cdc.gov/nchs/data/nsfg/2017-2019_NSFG_Male_SectionE_Codebook-508.pdf" class="uri">https://www.cdc.gov/nchs/data/nsfg/2017-2019_NSFG_Male_SectionE_Codebook-508.pdf</a></p>
 <p>Never married variable: nformwife</p>
 <p>Other interesting:
-- How did the marriage end: MARREND4 (first former wife) –&gt; MARREND7 (fourth former wife)</p>
+- How did the marriage end: MARREND4 (first former wife) –&gt; MARREND7 (fourth former wife)
+- #CASEID - this is how you can individually identify each person</p>
 <p>Complications:
 - There are overlaps between non-coresidential and coresidential fathers.
 - There are not just never married or divorced non-coresidential fathers. There are also fathers who are still married - the challenge is to disaggregate</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
