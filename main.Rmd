@@ -20,6 +20,11 @@ library(tidyverse)
 men <- read_csv("data/csv_2017_2019_Male.csv")
 
 ```
+#sexual orientation
+```{r}
+ men |> filter(ncall != "none") |> group_by(ORIENT_A) |> summarize(count = n())
+```
+
 #demographic mapping
 ```{r}
 men |> group_by(nformwife) |> filter(nformwife != "NA" & nformwife != "none") |> summarize(form_wives = n()) |>
@@ -40,10 +45,112 @@ men |> filter(ncall != "none") |> group_by(marstat) |> summarize(cur_mar = n()) 
 
 ```
 
+#MILESTONE 4 WORK
+
+```{r}
+
+
+```
+
+```{r}
+#focal child is the youngest child of the survey respondent
+men |> filter(ncall != "none") |> select(caseid, ncall, NRMEAL04, NRMEAL518)
+
+#glimpse(men$NUMNCU18)
+
+```
+
+
+#LOOKING AT 0-4 vs 5-18
+```{r}
+
+
+
+recode_num <- function(dataframe_input, variable_input, new_variable_name) {
+  new_dataframe <- dataframe_input |> filter(variable_input != "NA") |> mutate(new_variable_name = case_when(variable_input == "Not at all" ~ 1, variable_input == "Less than once a week" ~ 2, variable_input == "About once a week" ~ 3, variable_input == "Several times a week" ~ 4, variable_input == "Every day (at least once a day)" ~ 5))
+  return(new_dataframe)
+}
+
+#WANT TO THINK ABOUT IMPLICATION OF MISSING DATA - how to look at refused answers? Or if there is a way to infer the rest of the NA answers? What about not ascertained?
+
+
+#JUST STRAIGHT
+#visit_04 <- men |> filter(NRVISIT04 != "NA" & NRVISIT04 != "Not ascertained") |> mutate(visit_bool_04 = case_when(NRVISIT04 == "Not at all" ~ 1, NRVISIT04 == "Less than once a week" ~ 2, NRVISIT04 == "About once a week" ~ 3, NRVISIT04 == "Several times a week" ~ 4, NRVISIT04 == "Every day (at least once a day)" ~ 5))
+
+#DAYS OF WEEK
+visit_04 <- men |> filter(NRVISIT04 != "NA" & NRVISIT04 != "Not ascertained") |> mutate(visit_bool_04 = case_when(NRVISIT04 == "Not at all" ~ 0, NRVISIT04 == "Less than once a week" ~ 0.5, NRVISIT04 == "About once a week" ~ 1, NRVISIT04 == "Several times a week" ~ 3, NRVISIT04 == "Every day (at least once a day)" ~ 7))
+  
+  #recode_num(men, men$NRVISIT04, "visit_bool")
+#visit_04$NRVISIT04
+
+
+
+
+```
+
+```{r}
+
+#there's also some "Don't know" here
+
+
+#JUST STRAIGHT 1 through 5
+#visit_518 <- men |> filter(NRVISIT518 != "NA" & NRVISIT518 != "Not ascertained" & NRVISIT518 != "Don't know") |> mutate(visit_bool_518 = case_when(NRVISIT518 == "Not at all" ~ 1, NRVISIT518 == "Less than once a week" ~ 2, NRVISIT518 == "About once a week" ~ 3, NRVISIT518 == "Several times a week" ~ 4, NRVISIT518 == "Every day (at least once a day)" ~ 5))
+
+
+##TRYING WITH DAYS OF WEEK INSTEAD
+visit_518 <- men |> filter(NRVISIT518 != "NA" & NRVISIT518 != "Not ascertained" & NRVISIT518 != "Don't know") |> mutate(visit_bool_518 = case_when(NRVISIT518 == "Not at all" ~ 0, NRVISIT518 == "Less than once a week" ~ 0.5, NRVISIT518 == "About once a week" ~ 1, NRVISIT518 == "Several times a week" ~ 3, NRVISIT518 == "Every day (at least once a day)" ~ 7))
+
+
+
+ate_marriage_status_04 <- visit_04 |> group_by(marstat) |> summarize(avg_visits_04 = mean(visit_bool_04)) |> filter(marstat == "Divorced or annulled" | marstat == "Never been married")
+
+ate_marriage_status_518 <- visit_518 |> group_by(marstat) |> summarize(avg_visits_518 = mean(visit_bool_518)) |> filter(marstat == "Divorced or annulled" | marstat == "Never been married")
+
+ate_mar_total <- left_join(ate_marriage_status_04, ate_marriage_status_518)
+
+
+
+#ate_marriage_status_04
+#ate_marriage_status_518
+
+#ate
+
+#engagement does drop off
+#this effect can be seen clearer when making rough approximations for the number of days that somebody would be seeing their kids. 
+#the parent of a 5-18 year old sees their kid on average 1 day less per week than the non-coresidential parent of a 0-4 year old. 
+
+```
+
+
+#general
+#NRVISIT04
+#NRSATVIS04
+
+#accessibility - spending time with child
+#NROUTG04
+#NRMEAL04
+#NRERRAND04
+#NROVRNT04
+#NRPLAY04
+#NRREAD04
+#NRAFFECT04
+#NRPRAISE04
+
+#responsibility - management of child's life
+#NRFEED04
+#NRBATH04
+#NRDIAPER04
+#NRBED04
+#NRAPPT04
+
+#Discipline/monitoring
+#NRDISC04
+
+
 
 
 ```{r}
-#ncall is number of coresidential children
+#ncall is number of non-coresidential children
 #need to see if men are currently married as well, and to which of their wives the kids belong
 
 
