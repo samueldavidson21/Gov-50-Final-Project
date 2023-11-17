@@ -12,7 +12,7 @@ output:
 For this analysis, I want to use one variable that tracks non-coresidential parental engagement, number of visits per week, to approximate overall how engaged different groups of fathers are. I'm assuming that this variable will be correlated to other engagement variables such as number of meals or going to appointments with children. I am going to be looking at two different groups of fathers in particular, fathers that are divorced and fathers that never married. What we can see from this data is that fathers of children ages 0-4 who are divorced see their kids, on average, about 0.22 days fewer per week than fathers who never married, but fathers of children ages 5-18 who are divorced see their kids, on average, about 0.19 days more per week than fathers who never married. The effect of marriage status is different depending on the ages of the non-coresidential children. 
 
 
-```{r}
+```{r, echo=FALSE}
 library(tidyverse)
 men <- read_csv("data/csv_2017_2019_Male.csv")
 
@@ -26,7 +26,7 @@ ate_marriage_status_518 <- visit_518 |> group_by(marstat) |> summarize(avg_visit
 
 ate_mar_total <- left_join(ate_marriage_status_04, ate_marriage_status_518)
 
-ate_mar_total
+knitr::kable(ate_mar_total, col.names = c("Marriage Status", "Average Visits per Week (age 0-4)", "Average Visits per Week (age 5-18)"), digits = 2, align = "c")
 
 
 ```
