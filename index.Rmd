@@ -7,13 +7,13 @@ output:
     self_contained: false
 ---
 
-#Introduction
+# Introduction
 
 My research question for this project was: Do non-coresidential fathers, fathers who do not live with their children, have different levels of engagement with their children based on their marriage status? The two marriage statuses that I was particularly interested in were fathers who were never married and fathers who were married and then divorced or annulled. My hypothesis was that fathers who were married and then divorced would have higher levels of engagement with their children because if they were in a marriage with their spouse that they had children with, then it seems like their level of engagement with their family overall would be higher than a father who was never married to his spouse. 
 
 This research question is interesting to me because there are many aspects of society and law in the U.S. that emphasize the importance of the institution of marriage, particularly for family stability and the benefit of children. As a large percentage of marriages end in divorce and with marriage rates at historic lows, an interesting and common scenario to investigate is not the engagement of fathers who are still in marriages or still living with their children but fathers who are not. Is the emphasis on marriage justified by the outcomes for children of divorced parents or should the law encourage more non-traditional family structures that account for children outside of marriage. **maybe clarify this section on the stakes a little better
 
-#Data
+# Data
 
 The data that I am pulling from is the [CDC's National Survey on Family Growth](https://www.cdc.gov/nchs/nsfg/index.htm). The survey collects data on both men and women and data is collected through continuous field interviews. The data that I am looking at specifically is just the data collected on men ages 15-44 from 2017 to 2019. This selection of data includes 5,206 men. 
 
@@ -39,8 +39,12 @@ visit04_1 <- div_nev_men |>
   filter(NRVISIT04 != "NA" & NRVISIT04 != "Not ascertained") |> 
   mutate(visit_bool_04_1 = case_when(NRVISIT04 == "Not at all" ~ 0, NRVISIT04 == "Less than once a week" ~ 0.5, NRVISIT04 == "About once a week" ~ 1, NRVISIT04 == "Several times a week" ~ 3, NRVISIT04 == "Every day (at least once a day)" ~ 7))
 
-visit04_1 |> ggplot(aes(x=visit_bool_04_1)) + geom_histogram(binwidth = 0.5, fill = "#004080") + labs(title = "Distribution of visits per week, both types of non-coresidential fathers", x = "Visits per Week", y = "Count")
+#Visualization of number of visits per week
+visit04_1 |> 
+  ggplot(aes(x=visit_bool_04_1)) + geom_histogram(binwidth = 0.5, fill = "#004080") + labs(title = "Distribution of visits per week, both types of non-coresidential fathers", x = "Visits per Week", y = "Count")
 ```
+
+
 
 
 #Running a Regression
