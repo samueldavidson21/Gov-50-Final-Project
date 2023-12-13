@@ -45,9 +45,25 @@ men |> filter(ncall != "none") |> group_by(marstat) |> summarize(cur_mar = n()) 
 
 ```
 
-#MILESTONE 4 WORK
+#Extra random stuff
 
 ```{r}
+##NRAFFECT04 - "In the last four weeks, how often did you... ) Praise [NAME OF NONCORESIDENTIAL FOCAL CHILD] for doing something worthwhile?" For ages 0-4
+
+affect04 <- div_nev_men |> filter(NRAFFECT04 != "NA" & NRAFFECT04 != "Not ascertained") |> mutate(affect_bool_04 = case_when(NRAFFECT04 == "Not at all" ~ 0, NRAFFECT04 == "Less than once a week" ~ 0.5, NRAFFECT04 == "About once a week" ~ 1, NRAFFECT04 == "Several times a week" ~ 3, NRAFFECT04 == "Every day (at least once a day)" ~ 7))
+
+regression_affect04 <- lm(affect_bool_04 ~ divorced_vs_never + age_num + race + totincr, data = affect04)
+
+modelsummary::modelsummary(regression_affect04, statistic = c("s.e. = {std.error}",
+                                         "p = {p.value}"), gof_map = c("nobs", "r.squared", "adj.r.squared"))
+
+##NRAFFECT518 - same thing, children 5-18
+affect518 <- div_nev_men |> filter(NRAFFECT518 != "NA" & NRAFFECT518 != "Not ascertained" & NRAFFECT518 != "Don't know") |> mutate(affect_bool_518 = case_when(NRAFFECT518 == "Not at all" ~ 0, NRAFFECT518 == "Less than once a week" ~ 0.5, NRAFFECT518 == "About once a week" ~ 1, NRAFFECT518 == "Several times a week" ~ 3, NRAFFECT518 == "Every day (at least once a day)" ~ 7))
+
+regression_affect518 <- lm(affect_bool_518 ~ divorced_vs_never + age_num + race + totincr, data = affect518)
+
+modelsummary::modelsummary(regression_affect518, statistic = c("s.e. = {std.error}",
+                                         "p = {p.value}"), gof_map = c("nobs", "r.squared", "adj.r.squared"))
 
 
 ```
