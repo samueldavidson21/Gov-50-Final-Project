@@ -17,15 +17,35 @@ This research question is interesting to me because there are many aspects of so
 
 The data that I am pulling from is the [CDC's National Survey on Family Growth](https://www.cdc.gov/nchs/nsfg/index.htm). The survey collects data on both men and women and data is collected through continuous field interviews. The data that I am looking at specifically is just the data collected on men ages 15-44 from 2017 to 2019. This selection of data includes 5,206 men. 
 
-#Running a Regression
-
 ```{r}
-#Loading the Data
-
+#Loading the Data and Packages
 library(tidyverse)
 library(infer)
 men <- read_csv("data/csv_2017_2019_Male.csv")
+
+#Cleaning the Data
+#-->Filtering for only men who were never married or were divorced. Coding a binary variable to represent those two marriage statuses and recoding age as a numeric value. 
+div_nev_men <- men |> 
+  filter(marstat == "Divorced or annulled" | marstat == "Never been married") |>  
+  mutate(divorced_vs_never = case_when(marstat == "Divorced or annulled"~ 1, marstat == "Never been married" ~ 0), age_num = as.numeric(gsub("[^0-9]", "", AGE_A)))
 ```
+
+To answer this question, I looked at two different dependent variables. While the survey reports many different metrics for parental engagement such as going on errands, accompanying children to appointments, showing physical affection, spending play time, reading books, and eating meals, the variable that seemed most logical to summarize engagement was number of visits per week. Below is the distribution of that variable for both types of fathers:
+
+```{r}
+
+#Recoding the survey answers into numerical values for visits per week
+visit04_1 <- div_nev_men |> 
+  filter(NRVISIT04 != "NA" & NRVISIT04 != "Not ascertained") |> 
+  mutate(visit_bool_04_1 = case_when(NRVISIT04 == "Not at all" ~ 0, NRVISIT04 == "Less than once a week" ~ 0.5, NRVISIT04 == "About once a week" ~ 1, NRVISIT04 == "Several times a week" ~ 3, NRVISIT04 == "Every day (at least once a day)" ~ 7))
+
+visit04_1 |> ggplot(aes(x=visit_bool_04_1)) + geom_histogram(binwidth = 0.5, fill = "#004080") + labs(title = "Distribution of visits per week, both types of non-coresidential fathers", x = "Visits per Week", y = "Count")
+```
+
+
+#Running a Regression
+
+
 
 ```{r}
 #Now running our analyses - so one thing to ask ourselves, what does the p-value of the model summary tell us? Is that for a hypothesis of no difference? ***ASK IN OFFICE HOURS
@@ -86,7 +106,11 @@ modelsummary::modelsummary(regression_satvis04, statistic = c("s.e. = {std.error
 ggplot(regression_satvis04, aes(x = divorced_vs_never, y = sat_adjust04)) + geom_point() + labs(title = "Regression")
 
 
-#visualizing the regression of 
+#visualizing the dependent variable
+
+satvis04 |> ggplot(aes(x=sat_adjust04)) + geom_histogram()
+
+satvis04 |> filter(divorced_vs_never == 0) |> ggplot(aes(x=sat_adjust04)) + geom_histogram()
   
 ##NRSATVIS518
 
