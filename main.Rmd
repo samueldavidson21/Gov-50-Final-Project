@@ -47,6 +47,162 @@ men |> filter(ncall != "none") |> group_by(marstat) |> summarize(cur_mar = n()) 
 
 #Extra random stuff
 
+
+
+#Running a Regression
+
+
+
+```{r}
+#Now running our analyses - so one thing to ask ourselves, what does the p-value of the model summary tell us? Is that for a hypothesis of no difference? ***ASK IN OFFICE HOURS
+
+#Cleaning the data for only men who were never married or were divorced. Coding a binary variable to represent those two marriage statuses. 
+
+div_nev_men <- men |> filter(marstat == "Divorced or annulled" | marstat == "Never been married") |>  mutate(divorced_vs_never = case_when(marstat == "Divorced or annulled"~ 1, marstat == "Never been married" ~ 0), age_num = as.numeric(gsub("[^0-9]", "", AGE_A)))
+
+##NRVISIT04 - non-coresidential father visits per week, looking specifically at children aged 0-4.
+
+#Cleaning the data here. Filtering for missing data in the visit answer and then recoding the survey responses into discrete values.
+
+#Robustness testing
+
+visit04_1 <- div_nev_men |> filter(NRVISIT04 != "NA" & NRVISIT04 != "Not ascertained") |> mutate(visit_bool_04_1 = case_when(NRVISIT04 == "Not at all" ~ 0, NRVISIT04 == "Less than once a week" ~ 0.5, NRVISIT04 == "About once a week" ~ 1, NRVISIT04 == "Several times a week" ~ 3, NRVISIT04 == "Every day (at least once a day)" ~ 7))
+
+visit04_2 <- div_nev_men |> filter(NRVISIT04 != "NA" & NRVISIT04 != "Not ascertained") |> mutate(visit_bool_04_2 = case_when(NRVISIT04 == "Not at all" ~ 0, NRVISIT04 == "Less than once a week" ~ 0.4, NRVISIT04 == "About once a week" ~ 1, NRVISIT04 == "Several times a week" ~ 3, NRVISIT04 == "Every day (at least once a day)" ~ 7))
+
+visit04_3 <- div_nev_men |> filter(NRVISIT04 != "NA" & NRVISIT04 != "Not ascertained") |> mutate(visit_bool_04_3 = case_when(NRVISIT04 == "Not at all" ~ 0, NRVISIT04 == "Less than once a week" ~ 0.3, NRVISIT04 == "About once a week" ~ 1, NRVISIT04 == "Several times a week" ~ 3, NRVISIT04 == "Every day (at least once a day)" ~ 7))
+
+visit04_4 <- div_nev_men |> filter(NRVISIT04 != "NA" & NRVISIT04 != "Not ascertained") |> mutate(visit_bool_04_4 = case_when(NRVISIT04 == "Not at all" ~ 0, NRVISIT04 == "Less than once a week" ~ 0.2, NRVISIT04 == "About once a week" ~ 1, NRVISIT04 == "Several times a week" ~ 3, NRVISIT04 == "Every day (at least once a day)" ~ 7))
+
+visit04_5 <- div_nev_men |> filter(NRVISIT04 != "NA" & NRVISIT04 != "Not ascertained") |> mutate(visit_bool_04_5 = case_when(NRVISIT04 == "Not at all" ~ 0, NRVISIT04 == "Less than once a week" ~ 0.1, NRVISIT04 == "About once a week" ~ 1, NRVISIT04 == "Several times a week" ~ 3, NRVISIT04 == "Every day (at least once a day)" ~ 7))
+
+#Running a regression. Adding age, race, and income. 
+
+regression_visit04_1 <- lm(visit_bool_04_1 ~ divorced_vs_never + age_num + race + totincr, data = visit04_1)
+regression_visit04_2 <- lm(visit_bool_04_2 ~ divorced_vs_never + age_num + race + totincr, data = visit04_2)
+regression_visit04_3 <- lm(visit_bool_04_3 ~ divorced_vs_never + age_num + race + totincr, data = visit04_3)
+
+modelsummary::modelsummary(regression_visit04_1, statistic = c("s.e. = {std.error}",
+                                         "p = {p.value}"), gof_map = c("nobs", "r.squared", "adj.r.squared"))
+modelsummary::modelsummary(regression_visit04_2, statistic = c("s.e. = {std.error}",
+                                         "p = {p.value}"), gof_map = c("nobs", "r.squared", "adj.r.squared"))
+modelsummary::modelsummary(regression_visit04_3, statistic = c("s.e. = {std.error}",
+                                         "p = {p.value}"), gof_map = c("nobs", "r.squared", "adj.r.squared"))
+
+
+#I would say my study is well motivated: we would think fathers who were divorced spend more time with their kids than fathers who were never married. 
+
+#show that social desirability can affect people's answers because they want to seem like good fathers. The worry is the baseline had more variability, but because it's all scaled up the variance is harder to detect because the data is skewed up. "Social desirability bias made the results more muted than we might expect" 0.5 and 1 vs 4.5 and 5. Does this source of bias make my results less plausible or more plausible?
+
+#show that missing data is a threat to your ability to say causal. 
+
+#just explain what you're doing with these numbers. Maybe then assign different numbers like 0.1, 0.2, 0.3, 0.6 and re-run the analysis - robustness check. Plot the robustness check - show how the beta hat of your regression changes 
+
+#say how big your sample size is. Show their demographics. can you use survey weights in the lm function? Weights column in the lm function. Showed weighted vs unweighted. 
+
+
+#ifelse for divorced and never married. Put both into a regression. Should be mutually exclusive. Could do two separate regressions for visits 0-4 and visits 5-18 or combine them. But better to separate them. Potentially look at demographic differences as confounders between the two groups. Just say "holding constant" these demographic differences. Include all potential confounders in one regression along with the explanatory variables. If we were able to hold constant all of those other demographics, this is what the average effect of divorce status is going to be. Will get a p-value from the regression. Discuss causal and substantive significance. One causal concern is not including enough confounders. 
+
+#Could run a regression for these other things like errands, appointments. Just change the outcome variable, don't add into the regression as a control because it's not pre-treatment. Could help us understand the quality of these father-child relationships not just the quantity. 
+
+#Make sure you don't drop too many observations because of NA - just pick the most well-responded confounders like age, race, income. 
+
+#REGRESSION STUFF
+
+visit_04 <- visit_04 |> filter(marstat == "Divorced or annulled" | marstat == "Never been married") |> mutate(divorced = ifelse(marstat == "Divorced or annulled", 1, 0), never_married = ifelse(marstat == "Never been married", 1, 0))
+
+visit_04 <- visit_04 |> filter(marstat == "Divorced or annulled" | marstat == "Never been married") |> mutate(divorced_vs_never = case_when(marstat == "Divorced or annulled"~ 1, marstat == "Never been married" ~ 0))
+
+regression_04 <- lm(visit_bool_04 ~ divorced_vs_never, data = visit_04)
+
+summary(regression_04)
+#visit_518 <- visit_518 |> mutate(is_divorced = ifelse(marstat == "Divorced or annulled", 1, 0), never_married = ifelse(marstat == "Never been married", 1, 0))
+
+visit_518 <- visit_518 |> mutate(divorced_vs_never = case_when(marstat == "Divorced or annulled"~ 1, marstat == "Never been married" ~ 0))
+
+#regression_518_beta <- lm(visit_bool_518 ~ is_divorced + never_married, data = visit_518)
+regression_518 <- lm(visit_bool_518 ~ divorced_vs_never, data = visit_518)
+summary(regression_518) #this shows the difference between the two groups is not statistically significant. Can still run the robustness test. Add the other variables. Is the difference between the two groups more than statistically 0, the p-value is high. We cannot really reject the null that the difference is 0. 
+#summary(regression_518_beta) #this one says is the effect 0? So yes very low p-value
+
+#did get a very significant p-value with the other way to do visit_518.
+
+
+
+
+```
+
+
+```{r}
+
+##NRVISIT518 - non-coresidential father visits per week, looking specifically at children aged 5-18.
+
+visit518 <- div_nev_men |> filter(NRVISIT518 != "NA" & NRVISIT518 != "Not ascertained" & NRVISIT518 != "Don't know") |> mutate(visit_bool_518 = case_when(NRVISIT518 == "Not at all" ~ 0, NRVISIT518 == "Less than once a week" ~ 0.5, NRVISIT518 == "About once a week" ~ 1, NRVISIT518 == "Several times a week" ~ 3, NRVISIT518 == "Every day (at least once a day)" ~ 7))
+
+regression_visit518 <- lm(visit_bool_518 ~ divorced_vs_never + age_num + race + totincr, data = visit518)
+
+modelsummary::modelsummary(regression_visit518, statistic = c("s.e. = {std.error}",
+                                         "p = {p.value}"), gof_map = c("nobs", "r.squared", "adj.r.squared"))
+
+
+##NRSATVIS04 - statistically significant P-value, very low R^2. Do some of the other things you know how to do like bootstrapping ATE and hypothesis testing. Maybe we're not supposed to get a high R^2 here. 
+
+satvis04 <- div_nev_men |> filter(NRSATVIS04 != "Refused" & NRSATVIS04 != "Don't know" & NRSATVIS04 != "Not ascertained") |> mutate(sat_adjust04 = case_when(NRSATVIS04 == "Very satisfied" ~ 10, NRSATVIS04 == "Very dissatisfied" ~ 1, TRUE ~ as.numeric(NRSATVIS04)))
+
+regression_satvis04 <- lm(sat_adjust04 ~ divorced_vs_never + age_num + race + totincr, data = satvis04)
+
+modelsummary::modelsummary(regression_satvis04, statistic = c("s.e. = {std.error}",
+                                         "p = {p.value}"), gof_map = c("nobs", "r.squared", "adj.r.squared"))
+ggplot(regression_satvis04, aes(x = divorced_vs_never, y = sat_adjust04)) + geom_point() + labs(title = "Regression")
+
+
+#visualizing the dependent variable
+
+satvis04 |> ggplot(aes(x=sat_adjust04)) + geom_histogram()
+
+satvis04 |> filter(divorced_vs_never == 0) |> ggplot(aes(x=sat_adjust04)) + geom_histogram()
+  
+##NRSATVIS518
+
+satvis518 <- div_nev_men |> filter(NRSATVIS518 != "Refused" & NRSATVIS518 != "Don't know" & NRSATVIS518 != "Not ascertained") |> mutate(sat_adjust518 = case_when(NRSATVIS518 == "Very satisfied" ~ 10, NRSATVIS518 == "Very dissatisfied" ~ 1, TRUE ~ as.numeric(NRSATVIS518)))
+
+regression_satvis518 <- lm(sat_adjust518 ~ divorced_vs_never + age_num + race + totincr, data = satvis518)
+
+modelsummary::modelsummary(regression_satvis518, statistic = c("s.e. = {std.error}",
+                                         "p = {p.value}"), gof_map = c("nobs", "r.squared", "adj.r.squared"))
+
+##Bootstrapping NRSATVIS04 - ok so it's significant with an alpha level of 0.1 but not 0.05. How do we control for stuff within a bootstrap? It becomes more significant if you control for more stuff. **And I am I supposed to do a bootstrap or a permute here? **And how do I visualize a regression? Can I make a boxplot with the two categories of fathers based on the regression with controls and if so, how? ##DO INDENTATIONS FOR EACH NEW PIPE
+
+##So we get a different coefficient with the regression. Can show both of these. 
+
+##Can still do a robustness test on the insignificance of visit04
+
+real_ate_satvis04 <- satvis04 |> mutate(div_stat = ifelse(divorced_vs_never == 1, "Divorced", "Never Married")) |> specify(sat_adjust04 ~ div_stat) |> calculate(stat = "diff in means", order = c("Divorced","Never Married"))
+
+satvis04 |> mutate(div_stat = ifelse(divorced_vs_never == 1, "Divorced", "Never Married")) |> group_by(div_stat) |> summarize(Mean_val = mean(sat_adjust04))
+
+visualize_satvis04 <- satvis04 |> mutate(div_stat = ifelse(divorced_vs_never == 1, "Divorced", "Never Married"))
+
+visualize_satvis04 |> ggplot(aes(x = div_stat, y = sat_adjust04)) + geom_boxplot()
+
+
+ate_satvis04 <- satvis04 |> mutate(div_stat = ifelse(divorced_vs_never == 1, "Divorced", "Never Married")) |> specify(sat_adjust04 ~ div_stat) |> generate(reps = 1000, type = "bootstrap") |> calculate(stat = "diff in means", order = c("Divorced","Never Married"))
+
+ate_satvis04_ci_90 <- ate_satvis04 |> get_confidence_interval(level = 0.90, type = "percentile")
+
+ate_satvis04_ci_90
+
+visualize(ate_satvis04)
+
+ate_satvis04_se <- sd(ate_satvis04$stat)
+ate_satvis04_se #0.983
+#The s.e. on the no-controls regression is 0.930
+#The s.e. on the regression with controls is 1.108. So that is one limitation of the model, the standard error increases and the adjusted R^2 decreases but the effect is larger and the p-value decreases. Overall I'd value the higher statistical significance more and so would point to the regression with controls as the most useful analysis here. 
+
+```
+
+
+
 ```{r}
 ##NRAFFECT04 - "In the last four weeks, how often did you... ) Praise [NAME OF NONCORESIDENTIAL FOCAL CHILD] for doing something worthwhile?" For ages 0-4
 
@@ -162,6 +318,37 @@ ate_mar_total <- left_join(ate_marriage_status_04, ate_marriage_status_518)
 #Discipline/monitoring
 #NRDISC04
 
+
+
+
+# Variable Notes
+
+CDC codebook on fathering: https://www.cdc.gov/nchs/data/nsfg/2017-2019_NSFG_Male_SectionG_Codebook-508.pdf
+
+Variables of interest for coresidential focal child: (pages 1-12)
+- ROUTG04: In the last four weeks, how often did you
+Spend time with [NAME OF CORESIDENTIAL FOCAL CHILD] on an outing away from home to places such as
+museums, zoos, movies, sports, playground, park, etc.?
+- RMEAL04: (In the last four weeks, how often did you... )
+Eat evening meals together with [NAME OF CORESIDENTIAL FOCAL CHILD]?
+- And also: RERRAND04, RPLAY04, RREAD04, RAFFECT04, RPRAISE04, RFEED04,RBATH04, RDIAPER04, RBED04, RAPPT04
+- And those variables ending in 518, which signifies a coresidential focal child between 5-18 years of age. 
+
+For non-residential focal child:
+- NRVISIT04, NRSATVIS04, NROUTG04, etc. (pages 13-24)
+- NRVISITG518, etc.
+
+Codebook on Former Wives and First Cohabiting Partner: https://www.cdc.gov/nchs/data/nsfg/2017-2019_NSFG_Male_SectionE_Codebook-508.pdf
+
+Never married variable: nformwife
+
+Other interesting:
+- How did the marriage end: MARREND4 (first former wife) --> MARREND7 (fourth former wife)
+- #CASEID - this is how you can individually identify each person
+
+Complications:
+- There are overlaps between non-coresidential and coresidential fathers. 
+- There are not just never married or divorced non-coresidential fathers. There are also fathers who are still married - the challenge is to disaggregate 
 
 
 

@@ -9,13 +9,13 @@ output:
 
 # Introduction
 
-My research question for this project was: Do non-coresidential fathers, fathers who do not live with their children, have different levels of engagement with their children based on their marriage status? The two marriage statuses that I was particularly interested in were fathers who were never married and fathers who were married and then divorced or annulled. My hypothesis was that fathers who were married and then divorced would have higher levels of engagement with their children because if they were in a marriage with their spouse that they had children with, then it seems like their level of engagement with their family overall would be higher than a father who was never married to his spouse. 
+My research question for this project was: do non-coresidential fathers, a.k.a. fathers who do not live with their children, have different levels of engagement with their children based on their marriage status? The two marriage statuses that I was particularly interested in were fathers who were never married and fathers who were married and then divorced or annulled. My hypothesis was that fathers who were married and then divorced would have higher levels of engagement with their children because if they were previously in a marriage with their partner that they had children with, then it would be likely that their level of engagement with their family overall, including their non-coresidential children, would be higher than a father who was never married to his partner. 
 
-This research question is interesting to me because there are many aspects of society and law in the U.S. that emphasize the importance of the institution of marriage, particularly for family stability and the benefit of children. As a large percentage of marriages end in divorce and with marriage rates at historic lows, an interesting and common scenario to investigate is not the engagement of fathers who are still in marriages or still living with their children but fathers who are not. Is the emphasis on marriage justified by the outcomes for children of divorced parents or should the law encourage more non-traditional family structures that account for children outside of marriage. **maybe clarify this section on the stakes a little better
+This research question is interesting to me because there are many aspects of society and law in the U.S. that emphasize the importance of the institution of marriage, particularly for marriage's purpoted benefits for children. As a large percentage of marriages end in divorce and as marriage rates are at historic lows, an interesting and common scenario to investigate is not the engagement of fathers who are still in marriages or still living with their children but fathers who are not. Is the emphasis on marriage justified by the outcomes for children of divorced parents or should the law encourage more non-traditional family structures that account for children outside of marriage.
 
 # Data
 
-The data that I am pulling from is the [CDC's National Survey on Family Growth](https://www.cdc.gov/nchs/nsfg/index.htm). The survey collects data on both men and women and data is collected through continuous field interviews. The data that I am looking at specifically is just the data collected on men ages 15-44 from 2017 to 2019. This selection of data includes 5,206 men. 
+The data that I am pulling from is the [CDC's National Survey on Family Growth](https://www.cdc.gov/nchs/nsfg/index.htm). The survey collects data on both men and women and data is collected through continuous field interviews. The data that I am analyzing is data collected from 2017 to 2019 on men aged 15-44. This selection of data includes 5,206 men. This is a cross-sectional study, as we are looking at two groups of survey respondents at one point in time.
 
 ```{r}
 #Loading the Data and Packages
@@ -34,9 +34,7 @@ div_nev_men <- men |>
          age_num = as.numeric(gsub("[^0-9]", "", AGE_A)))
 ```
 
-To answer this question, I looked at two different dependent variables: number of visits and satisfaction with those visits. This is a cross-sectional study, as we are looking at two groups of survey respondents at one point in time.
-
-While the survey reports many different metrics for parental engagement such as going on errands, accompanying children to appointments, showing physical affection, spending play time, reading books, and eating meals, the variable that seemed most logical to summarize these more objective metrics of engagement was number of visits per week. To measure the subjective experience of these fathers, the satisfaction with these visits made sense. I am examining the data collected only for fathers of children ages 0-4 (this limitation is explained in my conclusion). Below is the distribution of number of visits for both types of fathers:
+To answer my research question, I looked at two different dependent variables: number of visits and satisfaction with those visits. While the survey reports many different metrics for parental engagement such as going on errands, accompanying children to appointments, showing physical affection, spending play time, reading books, and eating meals, the variable that seemed most logical to summarize these more objective metrics of engagement was number of visits per week. I was also curious about a more subjective measure of parental engagement, and so looked at the satisfaction with these visits. I am examining the data collected only for fathers of children ages 0-4 (this limitation is explained in my conclusion). Below is the distribution of number of visits for both types of fathers:
 
 ```{r}
 
@@ -59,9 +57,7 @@ visit04_1 |>
 ```
 And here is the distribution for satisfaction of visits:
 
-
 ```{r}
-
 #Cleaning the satisfaction variable, no arbitrary judgements had to be made however
 satvis04 <- div_nev_men |> 
   filter(NRSATVIS04 != "Refused" & 
@@ -71,9 +67,10 @@ satvis04 <- div_nev_men |>
                                   NRSATVIS04 == "Very dissatisfied" ~ 1, 
                                   TRUE ~ as.numeric(NRSATVIS04)))
 
+#Visualization of satisfaction with visits
 satvis04 |> ggplot(aes(x=sat_adjust04)) + 
   geom_histogram(fill = "#004080", binwidth = 1) + 
-  labs(title = "Distribution of satisfaction with visits, both types of non-coresidential fathers",
+  labs(title = "Distribution of Satisfaction with Visits, Both Types of Non-coresidential Fathers",
        x = "Satisfaction, rated 0-10",
        y = "Count") 
 
@@ -99,12 +96,12 @@ modelsummary::modelsummary(regression_visit04_1, statistic =
                            gof_map = c("nobs", "r.squared", "adj.r.squared"))
 ```
 
-As it is a binary regression, the coefficient on our independent variable, divorced_vs_never, represents the difference in means of our dependent variable, visits per week, controlling for age, race, and income. According to the regression, the difference in the average value of visits per week between divorced fathers and never married fathers is -0.240. This means that divorced fathers see their kids 0.24 times per week less than never married fathers. However, the p-value for this regression is 0.733. This does not meet any threshold for statistical significance, and so we cannot take this difference in means to be statistically significant. There is thus nothing that we can really say about a significant average difference in visits for the two groups of father.**MENTION IN CONCLUSION ABOUT NOBS AND ADJUSTED R SQUARED**
+As it is a binary regression, the coefficient on our independent variable, divorced_vs_never, represents the difference in means of our dependent variable, visits per week, holding age, race, and income constant. According to the regression, the difference in the average value of visits per week between divorced fathers and never married fathers is -0.240. This means that divorced fathers see their kids 0.24 times per week less than never married fathers. However, the p-value for this regression is 0.733. This does not meet any threshold for statistical significance and so we cannot take this difference in visits to be statistically significant. There is thus nothing that we can really say about a significant average difference in visits for the two groups of father.
 
-One abritrary decision that I had to make when refactoring the survey answers into numerical measures of visits per week is how to assign a number to answers like "Less than once a week" or "Several times a week." The most arbitrary decision I felt was for the former, for answers of "Less than once a week" which I first assigned a value of 0.5 visits per week. I wanted to conduct a robustness test on this decision to see if assigning a different value would provide a different outcome in the regression:
+One arbitrary decision that I had to make when recoding the survey answers into numerical measures of visits per week was how to assign a number to answers such as "Less than once a week" or "Several times a week." The most arbitrary decision I felt was for the former, for answers of "Less than once a week" which I first assigned a value of 0.5 visits per week. I wanted to conduct a robustness test on this decision to see if assigning a different value would provide a statistically significant outcome in the regression:
 
 ```{r}
-#Robustness testing
+#Robustness Testing
 
 
 #Recoding the visit variable in five different ways
@@ -210,9 +207,9 @@ robustness_test |> ggplot(aes(x=adjusted_values, y = coefficients)) +
 
 
 ```
-As we can see from the robustness test, adjusting the numerical values that correspond to "Less than once a week" does make a difference to the statistical significance, the most statistically significant difference came from  but it does not come close to a measure of statistical significance (even an alpha of 0.1)
+As we can see from the robustness test, adjusting the numerical values that correspond to "Less than once a week" does make a difference to the statistical significance, the most statistically significant difference came from choosing a value of 0.1, but it does not come close to any measure of statistical significance.
 
-The difference in number of visits between the two groups of fathers was thus ultimately statistically insignificant (further discussion in results below), but there is a statistically significant difference in the self-reported satisfaction with visits. Here is the regression for satisfaction with visits, controlling for age, race, and income:
+The difference in number of visits between the two groups of fathers was thus ultimately statistically insignificant (further discussion in results below), but there was a statistically significant difference in the self-reported satisfaction with visits. Here is the regression for satisfaction with visits, controlling for age, race, and income:
 
 ```{r}
 #Regression for satisfaction
@@ -231,9 +228,9 @@ modelsummary::modelsummary(regression_satvis04,
 
 ```
 
-The coefficient on divorced_vs_never in this binary regression represents the difference in means of satisfaction with visits controlling for age, race, and income. According to the regression, the difference in the average reported satisfaction with visits between divorced fathers and never married fathers is -2.399. To interpret this substantively, divorced fathers are roughly two and a half points less satisfied with their visits (on a scale out of ten) than their never married counterparts. The p-value for this regression is 0.033. This meets the threshold for statistical significance with alpha = 0.05.
+The coefficient on divorced_vs_never in this binary regression represents the difference in means of satisfaction with visits holding age, race, and income constant. According to the regression, the difference in the average reported satisfaction with visits between divorced fathers and never married fathers was -2.399. Interpreting this substantively, divorced fathers were roughly two and a half points less satisfied with their visits (on a scale out of ten) than their never married counterparts. The p-value for this regression is 0.033. This meets the threshold for statistical significance with an alpha of 0.05.
 
-Without controls for age, race, and income, the regression (see below) has a statistical significance of 0.062, only meeting the threshold for statistical significance with an alpha of 0.1. The coefficient of divorced_vs_never, the average difference in means between the two groups, is also lower, -1.754 but is still in the same direction, with divorced fathers reporting less satisfaction than fathers who were never married. 
+Without controls for age, race, and income, the regression (see below) has a statistical significance of 0.062, only meeting the threshold for statistical significance with an alpha of 0.1. The coefficient of divorced_vs_never, the average difference in means between the two groups, is also lower - -1.754 - but is still in the same direction, with divorced fathers reporting less satisfaction than fathers who were never married. 
 
 ```{r}
 #Regression without controls
@@ -262,9 +259,22 @@ visualize_satvis04 |> ggplot(aes(x = div_stat, y = sat_adjust04)) +
        y = "Reported Satisfaction")
 
 ```
+We can also calculate the average values and difference in means of the two groups, which gives us an equivalent answer to the regression without controls. The ATE of this calculation is equal to the coefficient of the divorced_vs_never binary variable and the average for Never Married fathers is equal to the value of the intercept in the regression.
 
-Without controls for age, race, and income, we can also reject the null hypothesis of no difference in means by bootstrapping a confidence interval:
+```{r}
+#Getting mean values for each group and calculating the ATE
+values <- visualize_satvis04 |> 
+  group_by(div_stat) |> 
+  summarize(mean_sat = mean(sat_adjust04)) |> 
+  pivot_wider(names_from = div_stat, values_from = mean_sat) |>
+  mutate(ATE = `Divorced` - `Never Married`)
 
+#Displaying the table
+knitr::kable(values,
+             align = 'c')
+```
+
+We can test the null hypothesis of no difference in means by bootstrapping a confidence interval (without controls for age, race, and income):
 
 ```{r}
 #Generating 1000 bootstrapped samples
@@ -286,7 +296,7 @@ knitr::kable(ate_satvis04_ci_90,
              align = 'c')
 
 ```
-We can see that an ATE of 0 falls outside of a 90% confidence interval, which corresponds to an alpha of 0.1.
+We can see that an ATE of 0 falls outside of a 90% confidence interval, which corresponds to an alpha of 0.1. We can thus reject the null hypothesis of no difference in means, without controls for age, race, and income, for an alpha of 0.1.
 
 ```{r}
 #Getting a 95% confidence interval from those samples
@@ -300,122 +310,19 @@ knitr::kable(ate_satvis04_ci_95,
              align = 'c')
 
 ```
-An ATE of 0 does, however, fall within a 95% confidence interval, which corresponds to an alpha of 0.05. Still, however, the most interesting regression remains the regression with controls for age, race, and income, which shows statistical signficance with an alpha of 0.05.
+An ATE of 0 does, however, fall within a 95% confidence interval, which corresponds to an alpha of 0.05. Still, however, the most interesting regression remains the regression with controls for age, race, and income, which shows statistical significance with an alpha of 0.05.
+
+Ultimately, although this difference is statistically significant, I do not believe that is possible to interpret the results causally. Even though we are able to control for factors of age, race, and income, there is no guarantee that the two groups of fathers are on average identical except for their different marital statuses. Thus, although the difference is measurable and significant, it is not possible to say that fathers who are never married have higher satisfaction with their visits than fathers who are divorced simply because they have never been married. There could be potential confounders that would affect both marital status and satisfaction with visits, such as personality traits that might make a father more likely to get divorced and be less satisfied with visits with their children.
+
+# Conclusion
+
+From running regressions on number of visits and satisfaction with those visits for two groups of non-coresidential fathers of children aged 0-4, fathers who never married and fathers who are divorced, we saw that although these two groups of fathers were seeing their children approximately the same number number of times, divorced fathers were significantly less satisfied with those visits. On average, controlling for age, race, and income, they were 2.4 points less happy than never married fathers. That coefficient was statistically significant with a p-value of 0.033. This disproves my hypothesis that fathers who are divorced would have higher levels of engagement with their children, because they do see their children the same amount, and it also disproves that hypothesis because they're less satisfied, which is a form of having a lower level of engagement. This was an interesting result to me because I think that it stands in contrast to a lot of traditional conventions around the importance of marriage and the social dangers or the danger to children of having those children outside of marriage. That being said, as the difference was only in the subjective experience of the father and not the objective metric of engagement, it is hard to say what the impact on these non-coresidential children may be.
+
+There are several limitations to this analysis, however. As I was looking at a small slice of fathers, subsetting the roughly 5,000 survey respondents several times, the number of observations in my regression for satisfaction with controls was only 96. I also had to filter out for many missing answers, as many survey respondents refused to answer even when they had eligible non-coresidential children aged 0-4. This also leads me to believe that there may be a social desirability bias acting on the data, whereby fathers would like to report higher numbers of visits or higher satisfaction with their visits to appear as better or more responsible fathers, and that desirability bias may impact the two groups of fathers differently, affecting the analysis. The adjusted R^2 for the main regression of interest, the reported satisfaction with controls, was only 0.002, meaning only 0.2% of the variation in reported satisfaction is explained by the variation in the model. This means that the model fit may be poor, although because the difference was statistically significant it is still an interesting finding. I ultimately decided to only look at fathers of children aged 0-4 instead of 5-18 to both simplify the study and focus on what I found as interesting in the discrepancy between visits and satisfaction. Given time and money, I would be interested to conduct a larger survey addressing this question in particular, ideally amassing a similar number of survey respondents as the overall NSFG survey contains. 
 
 
 
-
-#Running a Regression
-
-
-
-```{r}
-#Now running our analyses - so one thing to ask ourselves, what does the p-value of the model summary tell us? Is that for a hypothesis of no difference? ***ASK IN OFFICE HOURS
-
-#Cleaning the data for only men who were never married or were divorced. Coding a binary variable to represent those two marriage statuses. 
-
-div_nev_men <- men |> filter(marstat == "Divorced or annulled" | marstat == "Never been married") |>  mutate(divorced_vs_never = case_when(marstat == "Divorced or annulled"~ 1, marstat == "Never been married" ~ 0), age_num = as.numeric(gsub("[^0-9]", "", AGE_A)))
-
-##NRVISIT04 - non-coresidential father visits per week, looking specifically at children aged 0-4.
-
-#Cleaning the data here. Filtering for missing data in the visit answer and then recoding the survey responses into discrete values.
-
-#Robustness testing
-
-visit04_1 <- div_nev_men |> filter(NRVISIT04 != "NA" & NRVISIT04 != "Not ascertained") |> mutate(visit_bool_04_1 = case_when(NRVISIT04 == "Not at all" ~ 0, NRVISIT04 == "Less than once a week" ~ 0.5, NRVISIT04 == "About once a week" ~ 1, NRVISIT04 == "Several times a week" ~ 3, NRVISIT04 == "Every day (at least once a day)" ~ 7))
-
-visit04_2 <- div_nev_men |> filter(NRVISIT04 != "NA" & NRVISIT04 != "Not ascertained") |> mutate(visit_bool_04_2 = case_when(NRVISIT04 == "Not at all" ~ 0, NRVISIT04 == "Less than once a week" ~ 0.4, NRVISIT04 == "About once a week" ~ 1, NRVISIT04 == "Several times a week" ~ 3, NRVISIT04 == "Every day (at least once a day)" ~ 7))
-
-visit04_3 <- div_nev_men |> filter(NRVISIT04 != "NA" & NRVISIT04 != "Not ascertained") |> mutate(visit_bool_04_3 = case_when(NRVISIT04 == "Not at all" ~ 0, NRVISIT04 == "Less than once a week" ~ 0.3, NRVISIT04 == "About once a week" ~ 1, NRVISIT04 == "Several times a week" ~ 3, NRVISIT04 == "Every day (at least once a day)" ~ 7))
-
-visit04_4 <- div_nev_men |> filter(NRVISIT04 != "NA" & NRVISIT04 != "Not ascertained") |> mutate(visit_bool_04_4 = case_when(NRVISIT04 == "Not at all" ~ 0, NRVISIT04 == "Less than once a week" ~ 0.2, NRVISIT04 == "About once a week" ~ 1, NRVISIT04 == "Several times a week" ~ 3, NRVISIT04 == "Every day (at least once a day)" ~ 7))
-
-visit04_5 <- div_nev_men |> filter(NRVISIT04 != "NA" & NRVISIT04 != "Not ascertained") |> mutate(visit_bool_04_5 = case_when(NRVISIT04 == "Not at all" ~ 0, NRVISIT04 == "Less than once a week" ~ 0.1, NRVISIT04 == "About once a week" ~ 1, NRVISIT04 == "Several times a week" ~ 3, NRVISIT04 == "Every day (at least once a day)" ~ 7))
-
-#Running a regression. Adding age, race, and income. 
-
-regression_visit04_1 <- lm(visit_bool_04_1 ~ divorced_vs_never + age_num + race + totincr, data = visit04_1)
-regression_visit04_2 <- lm(visit_bool_04_2 ~ divorced_vs_never + age_num + race + totincr, data = visit04_2)
-regression_visit04_3 <- lm(visit_bool_04_3 ~ divorced_vs_never + age_num + race + totincr, data = visit04_3)
-
-modelsummary::modelsummary(regression_visit04_1, statistic = c("s.e. = {std.error}",
-                                         "p = {p.value}"), gof_map = c("nobs", "r.squared", "adj.r.squared"))
-modelsummary::modelsummary(regression_visit04_2, statistic = c("s.e. = {std.error}",
-                                         "p = {p.value}"), gof_map = c("nobs", "r.squared", "adj.r.squared"))
-modelsummary::modelsummary(regression_visit04_3, statistic = c("s.e. = {std.error}",
-                                         "p = {p.value}"), gof_map = c("nobs", "r.squared", "adj.r.squared"))
-
-
-```
-
-
-```{r}
-
-##NRVISIT518 - non-coresidential father visits per week, looking specifically at children aged 5-18.
-
-visit518 <- div_nev_men |> filter(NRVISIT518 != "NA" & NRVISIT518 != "Not ascertained" & NRVISIT518 != "Don't know") |> mutate(visit_bool_518 = case_when(NRVISIT518 == "Not at all" ~ 0, NRVISIT518 == "Less than once a week" ~ 0.5, NRVISIT518 == "About once a week" ~ 1, NRVISIT518 == "Several times a week" ~ 3, NRVISIT518 == "Every day (at least once a day)" ~ 7))
-
-regression_visit518 <- lm(visit_bool_518 ~ divorced_vs_never + age_num + race + totincr, data = visit518)
-
-modelsummary::modelsummary(regression_visit518, statistic = c("s.e. = {std.error}",
-                                         "p = {p.value}"), gof_map = c("nobs", "r.squared", "adj.r.squared"))
-
-
-##NRSATVIS04 - statistically significant P-value, very low R^2. Do some of the other things you know how to do like bootstrapping ATE and hypothesis testing. Maybe we're not supposed to get a high R^2 here. 
-
-satvis04 <- div_nev_men |> filter(NRSATVIS04 != "Refused" & NRSATVIS04 != "Don't know" & NRSATVIS04 != "Not ascertained") |> mutate(sat_adjust04 = case_when(NRSATVIS04 == "Very satisfied" ~ 10, NRSATVIS04 == "Very dissatisfied" ~ 1, TRUE ~ as.numeric(NRSATVIS04)))
-
-regression_satvis04 <- lm(sat_adjust04 ~ divorced_vs_never + age_num + race + totincr, data = satvis04)
-
-modelsummary::modelsummary(regression_satvis04, statistic = c("s.e. = {std.error}",
-                                         "p = {p.value}"), gof_map = c("nobs", "r.squared", "adj.r.squared"))
-ggplot(regression_satvis04, aes(x = divorced_vs_never, y = sat_adjust04)) + geom_point() + labs(title = "Regression")
-
-
-#visualizing the dependent variable
-
-satvis04 |> ggplot(aes(x=sat_adjust04)) + geom_histogram()
-
-satvis04 |> filter(divorced_vs_never == 0) |> ggplot(aes(x=sat_adjust04)) + geom_histogram()
-  
-##NRSATVIS518
-
-satvis518 <- div_nev_men |> filter(NRSATVIS518 != "Refused" & NRSATVIS518 != "Don't know" & NRSATVIS518 != "Not ascertained") |> mutate(sat_adjust518 = case_when(NRSATVIS518 == "Very satisfied" ~ 10, NRSATVIS518 == "Very dissatisfied" ~ 1, TRUE ~ as.numeric(NRSATVIS518)))
-
-regression_satvis518 <- lm(sat_adjust518 ~ divorced_vs_never + age_num + race + totincr, data = satvis518)
-
-modelsummary::modelsummary(regression_satvis518, statistic = c("s.e. = {std.error}",
-                                         "p = {p.value}"), gof_map = c("nobs", "r.squared", "adj.r.squared"))
-
-##Bootstrapping NRSATVIS04 - ok so it's significant with an alpha level of 0.1 but not 0.05. How do we control for stuff within a bootstrap? It becomes more significant if you control for more stuff. **And I am I supposed to do a bootstrap or a permute here? **And how do I visualize a regression? Can I make a boxplot with the two categories of fathers based on the regression with controls and if so, how? ##DO INDENTATIONS FOR EACH NEW PIPE
-
-##So we get a different coefficient with the regression. Can show both of these. 
-
-##Can still do a robustness test on the insignificance of visit04
-
-real_ate_satvis04 <- satvis04 |> mutate(div_stat = ifelse(divorced_vs_never == 1, "Divorced", "Never Married")) |> specify(sat_adjust04 ~ div_stat) |> calculate(stat = "diff in means", order = c("Divorced","Never Married"))
-
-satvis04 |> mutate(div_stat = ifelse(divorced_vs_never == 1, "Divorced", "Never Married")) |> group_by(div_stat) |> summarize(Mean_val = mean(sat_adjust04))
-
-visualize_satvis04 <- satvis04 |> mutate(div_stat = ifelse(divorced_vs_never == 1, "Divorced", "Never Married"))
-
-visualize_satvis04 |> ggplot(aes(x = div_stat, y = sat_adjust04)) + geom_boxplot()
-
-
-ate_satvis04 <- satvis04 |> mutate(div_stat = ifelse(divorced_vs_never == 1, "Divorced", "Never Married")) |> specify(sat_adjust04 ~ div_stat) |> generate(reps = 1000, type = "bootstrap") |> calculate(stat = "diff in means", order = c("Divorced","Never Married"))
-
-ate_satvis04_ci_90 <- ate_satvis04 |> get_confidence_interval(level = 0.90, type = "percentile")
-
-ate_satvis04_ci_90
-
-visualize(ate_satvis04)
-
-ate_satvis04_se <- sd(ate_satvis04$stat)
-ate_satvis04_se #0.983
-#The s.e. on the no-controls regression is 0.930
-#The s.e. on the regression with controls is 1.108. So that is one limitation of the model, the standard error increases and the adjusted R^2 decreases but the effect is larger and the p-value decreases. Overall I'd value the higher statistical significance more and so would point to the regression with controls as the most useful analysis here. 
-
-```
+# {End of the Final Report} - Below is milestones (I wasn't sure whether we're supposed to keep these or not)
 
 
 # Milestone 4: Drilling down on one variable
@@ -427,20 +334,10 @@ For this analysis, I want to use one variable that tracks non-coresidential pare
 library(tidyverse)
 men <- read_csv("data/csv_2017_2019_Male.csv")
 
-#I would say my study is well motivated: we would think fathers who were divorced spend more time with their kids than fathers who were never married. 
 
-#show that social desirability can affect people's answers because they want to seem like good fathers. The worry is the baseline had more variability, but because it's all scaled up the variance is harder to detect because the data is skewed up. "Social desirability bias made the results more muted than we might expect" 0.5 and 1 vs 4.5 and 5. Does this source of bias make my results less plausible or more plausible?
-
-#show that missing data is a threat to your ability to say causal. 
 
 visit_04 <- men |> filter(NRVISIT04 != "NA" & NRVISIT04 != "Not ascertained") |> mutate(visit_bool_04 = case_when(NRVISIT04 == "Not at all" ~ 0, NRVISIT04 == "Less than once a week" ~ 0.5, NRVISIT04 == "About once a week" ~ 1, NRVISIT04 == "Several times a week" ~ 3, NRVISIT04 == "Every day (at least once a day)" ~ 7))
 visit_518 <- men |> filter(NRVISIT518 != "NA" & NRVISIT518 != "Not ascertained" & NRVISIT518 != "Don't know") |> mutate(visit_bool_518 = case_when(NRVISIT518 == "Not at all" ~ 0, NRVISIT518 == "Less than once a week" ~ 0.5, NRVISIT518 == "About once a week" ~ 1, NRVISIT518 == "Several times a week" ~ 3, NRVISIT518 == "Every day (at least once a day)" ~ 7))
-
-#just explain what you're doing with these numbers. Maybe then assign different numbers like 0.1, 0.2, 0.3, 0.6 and re-run the analysis - robustness check. Plot the robustness check - show how the beta hat of your regression changes 
-
-#say how big your sample size is. Show their demographics. can you use survey weights in the lm function? Weights column in the lm function. Showed weighted vs unweighted. 
-
-
 
 ate_marriage_status_04 <- visit_04 |> group_by(marstat) |> summarize(avg_visits_04 = mean(visit_bool_04)) |> filter(marstat == "Divorced or annulled" | marstat == "Never been married")
 
@@ -449,34 +346,6 @@ ate_marriage_status_518 <- visit_518 |> group_by(marstat) |> summarize(avg_visit
 ate_mar_total <- left_join(ate_marriage_status_04, ate_marriage_status_518)
 
 knitr::kable(ate_mar_total, col.names = c("Marriage Status", "Average Visits per Week (age 0-4)", "Average Visits per Week (age 5-18)"), digits = 2, align = "c")
-
-#ifelse for divorced and never married. Put both into a regression. Should be mutually exclusive. Could do two separate regressions for visits 0-4 and visits 5-18 or combine them. But better to separate them. Potentially look at demographic differences as confounders between the two groups. Just say "holding constant" these demographic differences. Include all potential confounders in one regression along with the explanatory variables. If we were able to hold constant all of those other demographics, this is what the average effect of divorce status is going to be. Will get a p-value from the regression. Discuss causal and substantive significance. One causal concern is not including enough confounders. 
-
-#Could run a regression for these other things like errands, appointments. Just change the outcome variable, don't add into the regression as a control because it's not pre-treatment. Could help us understand the quality of these father-child relationships not just the quantity. 
-
-#Make sure you don't drop too many observations because of NA - just pick the most well-responded confounders like age, race, income. 
-
-#REGRESSION STUFF
-
-visit_04 <- visit_04 |> filter(marstat == "Divorced or annulled" | marstat == "Never been married") |> mutate(divorced = ifelse(marstat == "Divorced or annulled", 1, 0), never_married = ifelse(marstat == "Never been married", 1, 0))
-
-visit_04 <- visit_04 |> filter(marstat == "Divorced or annulled" | marstat == "Never been married") |> mutate(divorced_vs_never = case_when(marstat == "Divorced or annulled"~ 1, marstat == "Never been married" ~ 0))
-
-regression_04 <- lm(visit_bool_04 ~ divorced_vs_never, data = visit_04)
-
-summary(regression_04)
-#visit_518 <- visit_518 |> mutate(is_divorced = ifelse(marstat == "Divorced or annulled", 1, 0), never_married = ifelse(marstat == "Never been married", 1, 0))
-
-visit_518 <- visit_518 |> mutate(divorced_vs_never = case_when(marstat == "Divorced or annulled"~ 1, marstat == "Never been married" ~ 0))
-
-#regression_518_beta <- lm(visit_bool_518 ~ is_divorced + never_married, data = visit_518)
-regression_518 <- lm(visit_bool_518 ~ divorced_vs_never, data = visit_518)
-summary(regression_518) #this shows the difference between the two groups is not statistically significant. Can still run the robustness test. Add the other variables. Is the difference between the two groups more than statistically 0, the p-value is high. We cannot really reject the null that the difference is 0. 
-#summary(regression_518_beta) #this one says is the effect 0? So yes very low p-value
-
-#did get a very significant p-value with the other way to do visit_518.
-
-
 
 ```
 
@@ -501,34 +370,5 @@ I am interested in looking at non-coresidential father involvement in their chil
 # Hypothesis
 
 I think that non-coresidential fathers who were previously married would be more involved in their children's lives than fathers who were never married, because they would potentially have a closer or better relationship with their ex. I am interested in seeing if this effect is different across different income spectrums, however. 
-
-# Variable Notes
-
-CDC codebook on fathering: https://www.cdc.gov/nchs/data/nsfg/2017-2019_NSFG_Male_SectionG_Codebook-508.pdf
-
-Variables of interest for coresidential focal child: (pages 1-12)
-- ROUTG04: In the last four weeks, how often did you
-Spend time with [NAME OF CORESIDENTIAL FOCAL CHILD] on an outing away from home to places such as
-museums, zoos, movies, sports, playground, park, etc.?
-- RMEAL04: (In the last four weeks, how often did you... )
-Eat evening meals together with [NAME OF CORESIDENTIAL FOCAL CHILD]?
-- And also: RERRAND04, RPLAY04, RREAD04, RAFFECT04, RPRAISE04, RFEED04,RBATH04, RDIAPER04, RBED04, RAPPT04
-- And those variables ending in 518, which signifies a coresidential focal child between 5-18 years of age. 
-
-For non-residential focal child:
-- NRVISIT04, NRSATVIS04, NROUTG04, etc. (pages 13-24)
-- NRVISITG518, etc.
-
-Codebook on Former Wives and First Cohabiting Partner: https://www.cdc.gov/nchs/data/nsfg/2017-2019_NSFG_Male_SectionE_Codebook-508.pdf
-
-Never married variable: nformwife
-
-Other interesting:
-- How did the marriage end: MARREND4 (first former wife) --> MARREND7 (fourth former wife)
-- #CASEID - this is how you can individually identify each person
-
-Complications:
-- There are overlaps between non-coresidential and coresidential fathers. 
-- There are not just never married or divorced non-coresidential fathers. There are also fathers who are still married - the challenge is to disaggregate 
 
 
