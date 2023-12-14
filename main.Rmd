@@ -319,6 +319,54 @@ ate_mar_total <- left_join(ate_marriage_status_04, ate_marriage_status_518)
 #NRDISC04
 
 
+# {End of the Final Report} - Below is milestones (I wasn't sure whether we're supposed to keep these or not)
+
+
+# Milestone 4: Drilling down on one variable
+
+For this analysis, I want to use one variable that tracks non-coresidential parental engagement, number of visits per week, to approximate overall how engaged different groups of fathers are. I'm assuming that this variable will be correlated to other engagement variables such as number of meals or going to appointments with children. I am going to be looking at two different groups of fathers in particular, fathers that are divorced and fathers that never married. What we can see from this data is that fathers of children ages 0-4 who are divorced see their kids, on average, about 0.22 days fewer per week than fathers who never married, but fathers of children ages 5-18 who are divorced see their kids, on average, about 0.19 days more per week than fathers who never married. The effect of marriage status is different depending on the ages of the non-coresidential children. 
+
+
+```{r, echo=FALSE}
+library(tidyverse)
+men <- read_csv("data/csv_2017_2019_Male.csv")
+
+
+
+visit_04 <- men |> filter(NRVISIT04 != "NA" & NRVISIT04 != "Not ascertained") |> mutate(visit_bool_04 = case_when(NRVISIT04 == "Not at all" ~ 0, NRVISIT04 == "Less than once a week" ~ 0.5, NRVISIT04 == "About once a week" ~ 1, NRVISIT04 == "Several times a week" ~ 3, NRVISIT04 == "Every day (at least once a day)" ~ 7))
+visit_518 <- men |> filter(NRVISIT518 != "NA" & NRVISIT518 != "Not ascertained" & NRVISIT518 != "Don't know") |> mutate(visit_bool_518 = case_when(NRVISIT518 == "Not at all" ~ 0, NRVISIT518 == "Less than once a week" ~ 0.5, NRVISIT518 == "About once a week" ~ 1, NRVISIT518 == "Several times a week" ~ 3, NRVISIT518 == "Every day (at least once a day)" ~ 7))
+
+ate_marriage_status_04 <- visit_04 |> group_by(marstat) |> summarize(avg_visits_04 = mean(visit_bool_04)) |> filter(marstat == "Divorced or annulled" | marstat == "Never been married")
+
+ate_marriage_status_518 <- visit_518 |> group_by(marstat) |> summarize(avg_visits_518 = mean(visit_bool_518)) |> filter(marstat == "Divorced or annulled" | marstat == "Never been married")
+
+ate_mar_total <- left_join(ate_marriage_status_04, ate_marriage_status_518)
+
+knitr::kable(ate_mar_total, col.names = c("Marriage Status", "Average Visits per Week (age 0-4)", "Average Visits per Week (age 5-18)"), digits = 2, align = "c")
+
+```
+
+
+# Milestone 3: Data Visualization
+
+```{r fig.height = 5, fig.width = 15, echo=FALSE}
+library(tidyverse)
+men <- read_csv("data/csv_2017_2019_Male.csv")
+
+men |> filter(ncall != "none") |> group_by(marstat) |> summarize(cur_mar = n()) |> ggplot(aes(y=marstat, x=cur_mar)) + geom_col() + labs(title = "Distribution of current marriage status among fathers reporting at least 1 non-coresidential child", x = "Count", y = "Marriage Status")
+
+```
+# Data Source
+
+My dataset is the CDC's National Survey of Family Growth (NSFG), conducted between 2017 and 2019. The specific data I'm looking at is an independent sample of men aged 15-49. 
+
+# Research Question
+
+I am interested in looking at non-coresidential father involvement in their children's lives, I want to then see how different factors such as educational attainment, income, and former marital status impacts that involvement. I will have to aggregate several different measures of child involvement present in the survey in order to have one single dependent variable. 
+
+# Hypothesis
+
+I think that non-coresidential fathers who were previously married would be more involved in their children's lives than fathers who were never married, because they would potentially have a closer or better relationship with their ex. I am interested in seeing if this effect is different across different income spectrums, however. 
 
 
 # Variable Notes
