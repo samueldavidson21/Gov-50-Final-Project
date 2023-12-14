@@ -24,25 +24,283 @@ library(infer)
 men <- read_csv("data/csv_2017_2019_Male.csv")
 
 #Cleaning the Data
-#-->Filtering for only men who were never married or were divorced. Coding a binary variable to represent those two marriage statuses and recoding age as a numeric value. 
+#Filtering for only men who were never married or were divorced. 
+#Coding a binary variable to represent those two marriage statuses
+#Recoding age as a numeric value. 
 div_nev_men <- men |> 
   filter(marstat == "Divorced or annulled" | marstat == "Never been married") |>  
-  mutate(divorced_vs_never = case_when(marstat == "Divorced or annulled"~ 1, marstat == "Never been married" ~ 0), age_num = as.numeric(gsub("[^0-9]", "", AGE_A)))
+  mutate(divorced_vs_never = case_when(marstat == "Divorced or annulled"~ 1, 
+                                       marstat == "Never been married" ~ 0), 
+         age_num = as.numeric(gsub("[^0-9]", "", AGE_A)))
 ```
 
-To answer this question, I looked at two different dependent variables. While the survey reports many different metrics for parental engagement such as going on errands, accompanying children to appointments, showing physical affection, spending play time, reading books, and eating meals, the variable that seemed most logical to summarize engagement was number of visits per week. Below is the distribution of that variable for both types of fathers:
+To answer this question, I looked at two different dependent variables: number of visits and satisfaction with those visits. This is a cross-sectional study, as we are looking at two groups of survey respondents at one point in time.
+
+While the survey reports many different metrics for parental engagement such as going on errands, accompanying children to appointments, showing physical affection, spending play time, reading books, and eating meals, the variable that seemed most logical to summarize these more objective metrics of engagement was number of visits per week. To measure the subjective experience of these fathers, the satisfaction with these visits made sense. I am examining the data collected only for fathers of children ages 0-4 (this limitation is explained in my conclusion). Below is the distribution of number of visits for both types of fathers:
 
 ```{r}
 
 #Recoding the survey answers into numerical values for visits per week
 visit04_1 <- div_nev_men |> 
   filter(NRVISIT04 != "NA" & NRVISIT04 != "Not ascertained") |> 
-  mutate(visit_bool_04_1 = case_when(NRVISIT04 == "Not at all" ~ 0, NRVISIT04 == "Less than once a week" ~ 0.5, NRVISIT04 == "About once a week" ~ 1, NRVISIT04 == "Several times a week" ~ 3, NRVISIT04 == "Every day (at least once a day)" ~ 7))
+  mutate(visit_bool_04_1 = case_when(NRVISIT04 == "Not at all" ~ 0, 
+                                     NRVISIT04 == "Less than once a week" ~ 0.5, 
+                                     NRVISIT04 == "About once a week" ~ 1, 
+                                     NRVISIT04 == "Several times a week" ~ 3, 
+                                     NRVISIT04 == "Every day (at least once a day)" ~ 7))
 
 #Visualization of number of visits per week
 visit04_1 |> 
-  ggplot(aes(x=visit_bool_04_1)) + geom_histogram(binwidth = 0.5, fill = "#004080") + labs(title = "Distribution of visits per week, both types of non-coresidential fathers", x = "Visits per Week", y = "Count")
+  ggplot(aes(x=visit_bool_04_1)) + 
+  geom_histogram(binwidth = 0.5, fill = "#004080") + 
+  labs(title = "Distribution of visits per week, both types of non-coresidential fathers", 
+       x = "Visits per Week", 
+       y = "Count")
 ```
+And here is the distribution for satisfaction of visits:
+
+
+```{r}
+
+#Cleaning the satisfaction variable, no arbitrary judgements had to be made however
+satvis04 <- div_nev_men |> 
+  filter(NRSATVIS04 != "Refused" & 
+           NRSATVIS04 != "Don't know" & 
+           NRSATVIS04 != "Not ascertained") |> 
+  mutate(sat_adjust04 = case_when(NRSATVIS04 == "Very satisfied" ~ 10, 
+                                  NRSATVIS04 == "Very dissatisfied" ~ 1, 
+                                  TRUE ~ as.numeric(NRSATVIS04)))
+
+satvis04 |> ggplot(aes(x=sat_adjust04)) + 
+  geom_histogram(fill = "#004080", binwidth = 1) + 
+  labs(title = "Distribution of satisfaction with visits, both types of non-coresidential fathers",
+       x = "Satisfaction, rated 0-10",
+       y = "Count") 
+
+```
+
+
+# Results
+
+I first ran a regression with visits per week as the dependent variable and the marital status of the non-coresidential father as an independent binary variable. I've included age, race, and income into the regression as controls, but unfortunately that does make the output table annoyingly long.
+
+```{r}
+#Regression
+regression_visit04_1 <- lm(visit_bool_04_1 ~ divorced_vs_never + 
+                             age_num + 
+                             race + 
+                             totincr, 
+                           data = visit04_1)
+
+#Outputting the model
+modelsummary::modelsummary(regression_visit04_1, statistic = 
+                             c("s.e. = {std.error}",
+                                         "p = {p.value}"), 
+                           gof_map = c("nobs", "r.squared", "adj.r.squared"))
+```
+
+As it is a binary regression, the coefficient on our independent variable, divorced_vs_never, represents the difference in means of our dependent variable, visits per week, controlling for age, race, and income. According to the regression, the difference in the average value of visits per week between divorced fathers and never married fathers is -0.240. This means that divorced fathers see their kids 0.24 times per week less than never married fathers. However, the p-value for this regression is 0.733. This does not meet any threshold for statistical significance, and so we cannot take this difference in means to be statistically significant. There is thus nothing that we can really say about a significant average difference in visits for the two groups of father.**MENTION IN CONCLUSION ABOUT NOBS AND ADJUSTED R SQUARED**
+
+One abritrary decision that I had to make when refactoring the survey answers into numerical measures of visits per week is how to assign a number to answers like "Less than once a week" or "Several times a week." The most arbitrary decision I felt was for the former, for answers of "Less than once a week" which I first assigned a value of 0.5 visits per week. I wanted to conduct a robustness test on this decision to see if assigning a different value would provide a different outcome in the regression:
+
+```{r}
+#Robustness testing
+
+
+#Recoding the visit variable in five different ways
+#Decreasing the value for "Less than once a week" by 0.1 each time
+visit04_1 <- div_nev_men |> 
+  filter(NRVISIT04 != "NA" & NRVISIT04 != "Not ascertained") |> 
+  mutate(visit_bool_04_1 = case_when(NRVISIT04 == "Not at all" ~ 0, 
+                                     NRVISIT04 == "Less than once a week" ~ 0.5, 
+                                     NRVISIT04 == "About once a week" ~ 1, 
+                                     NRVISIT04 == "Several times a week" ~ 3, 
+                                     NRVISIT04 == "Every day (at least once a day)" ~ 7))
+
+visit04_2 <- div_nev_men |> 
+  filter(NRVISIT04 != "NA" & NRVISIT04 != "Not ascertained") |> 
+  mutate(visit_bool_04_2 = case_when(NRVISIT04 == "Not at all" ~ 0, 
+                                     NRVISIT04 == "Less than once a week" ~ 0.4, 
+                                     NRVISIT04 == "About once a week" ~ 1, 
+                                     NRVISIT04 == "Several times a week" ~ 3, 
+                                     NRVISIT04 == "Every day (at least once a day)" ~ 7))
+
+visit04_3 <- div_nev_men |> 
+  filter(NRVISIT04 != "NA" & NRVISIT04 != "Not ascertained") |> 
+  mutate(visit_bool_04_3 = case_when(NRVISIT04 == "Not at all" ~ 0, 
+                                     NRVISIT04 == "Less than once a week" ~ 0.3, 
+                                     NRVISIT04 == "About once a week" ~ 1, 
+                                     NRVISIT04 == "Several times a week" ~ 3, 
+                                     NRVISIT04 == "Every day (at least once a day)" ~ 7))
+
+visit04_4 <- div_nev_men |> 
+  filter(NRVISIT04 != "NA" & NRVISIT04 != "Not ascertained") |> 
+  mutate(visit_bool_04_4 = case_when(NRVISIT04 == "Not at all" ~ 0, 
+                                     NRVISIT04 == "Less than once a week" ~ 0.2, 
+                                     NRVISIT04 == "About once a week" ~ 1, 
+                                     NRVISIT04 == "Several times a week" ~ 3, 
+                                     NRVISIT04 == "Every day (at least once a day)" ~ 7))
+
+visit04_5 <- div_nev_men |> 
+  filter(NRVISIT04 != "NA" & NRVISIT04 != "Not ascertained") |> 
+  mutate(visit_bool_04_5 = case_when(NRVISIT04 == "Not at all" ~ 0, 
+                                     NRVISIT04 == "Less than once a week" ~ 0.1, 
+                                     NRVISIT04 == "About once a week" ~ 1, 
+                                     NRVISIT04 == "Several times a week" ~ 3, 
+                                     NRVISIT04 == "Every day (at least once a day)" ~ 7))
+
+#Running a regression for each of the different recodes
+regression_visit04_1 <- lm(visit_bool_04_1 ~ divorced_vs_never + 
+                             age_num + 
+                             race + 
+                             totincr, 
+                           data = visit04_1)
+
+regression_visit04_2 <- lm(visit_bool_04_2 ~ divorced_vs_never + 
+                             age_num + 
+                             race + 
+                             totincr, 
+                           data = visit04_2)
+
+regression_visit04_3 <- lm(visit_bool_04_3 ~ divorced_vs_never + 
+                             age_num + 
+                             race + 
+                             totincr, 
+                           data = visit04_3)
+
+regression_visit04_4 <- lm(visit_bool_04_4 ~ divorced_vs_never + 
+                             age_num + 
+                             race + 
+                             totincr, 
+                           data = visit04_4)
+
+regression_visit04_5 <- lm(visit_bool_04_5 ~ divorced_vs_never + 
+                             age_num + 
+                             race + 
+                             totincr, 
+                           data = visit04_5)
+
+#Adding the reported p-value from each regression into a list
+coefficients <- summary(regression_visit04_1)$coefficients["divorced_vs_never", "Pr(>|t|)"]
+
+coefficients <- append(coefficients, summary(regression_visit04_2)$
+                         coefficients["divorced_vs_never", "Pr(>|t|)"])
+
+coefficients <- append(coefficients, summary(regression_visit04_3)$
+                         coefficients["divorced_vs_never", "Pr(>|t|)"])
+
+coefficients <- append(coefficients, summary(regression_visit04_4)$
+                         coefficients["divorced_vs_never", "Pr(>|t|)"])
+
+coefficients <- append(coefficients, summary(regression_visit04_5)$
+                         coefficients["divorced_vs_never", "Pr(>|t|)"])
+
+#Also making a list of the different values set for "Less than once a week"
+adjusted_values <- c(0.5, 0.4, 0.3, 0.2, 0.1)
+
+#Making a tibble out of the two lists we just created
+robustness_test <- tibble(coefficients, adjusted_values)
+
+#Visualizing the test
+robustness_test |> ggplot(aes(x=adjusted_values, y = coefficients)) + 
+  geom_point(color = "#004080") + 
+  labs(title = "Robustness Test For Recoding the Dependent Variable Visits per Week", 
+       x = "Adjusted Numeric Value", 
+       y = "P-Value of the Resulting Regression")
+
+
+```
+As we can see from the robustness test, adjusting the numerical values that correspond to "Less than once a week" does make a difference to the statistical significance, the most statistically significant difference came from  but it does not come close to a measure of statistical significance (even an alpha of 0.1)
+
+The difference in number of visits between the two groups of fathers was thus ultimately statistically insignificant (further discussion in results below), but there is a statistically significant difference in the self-reported satisfaction with visits. Here is the regression for satisfaction with visits, controlling for age, race, and income:
+
+```{r}
+#Regression for satisfaction
+#Using the previously calculated dependent variable sat_adjust04
+regression_satvis04 <- lm(sat_adjust04 ~ divorced_vs_never + 
+                            age_num + 
+                            race + 
+                            totincr, 
+                          data = satvis04)
+
+#Displaying the regression
+modelsummary::modelsummary(regression_satvis04, 
+                           statistic = c("s.e. = {std.error}",
+                                         "p = {p.value}"), 
+                           gof_map = c("nobs", "r.squared", "adj.r.squared"))
+
+```
+
+The coefficient on divorced_vs_never in this binary regression represents the difference in means of satisfaction with visits controlling for age, race, and income. According to the regression, the difference in the average reported satisfaction with visits between divorced fathers and never married fathers is -2.399. To interpret this substantively, divorced fathers are roughly two and a half points less satisfied with their visits (on a scale out of ten) than their never married counterparts. The p-value for this regression is 0.033. This meets the threshold for statistical significance with alpha = 0.05.
+
+Without controls for age, race, and income, the regression (see below) has a statistical significance of 0.062, only meeting the threshold for statistical significance with an alpha of 0.1. The coefficient of divorced_vs_never, the average difference in means between the two groups, is also lower, -1.754 but is still in the same direction, with divorced fathers reporting less satisfaction than fathers who were never married. 
+
+```{r}
+#Regression without controls
+regression_satvis04_no_controls <- lm(sat_adjust04 ~ divorced_vs_never, 
+                          data = satvis04)
+
+#Displaying the regression
+modelsummary::modelsummary(regression_satvis04_no_controls, 
+                           statistic = c("s.e. = {std.error}",
+                                         "p = {p.value}"), 
+                           gof_map = c("nobs", "r.squared", "adj.r.squared"))
+
+```
+
+Another way to visualize this difference, without controls for age, race, and income, is to look at a boxplot of the two types of fathers:
+
+```{r}
+#First recoding for a Divorced and Never Married category
+visualize_satvis04 <- satvis04 |> mutate(div_stat = ifelse(divorced_vs_never == 1, "Divorced", "Never Married"))
+
+#Then piping to a ggplot visualization
+visualize_satvis04 |> ggplot(aes(x = div_stat, y = sat_adjust04)) + 
+  geom_boxplot(fill = "#004080") + 
+  labs(title = "Boxplot of Reported Satisfaction for the Two Groups of Fathers",
+       x = "Marriage Status",
+       y = "Reported Satisfaction")
+
+```
+
+Without controls for age, race, and income, we can also reject the null hypothesis of no difference in means by bootstrapping a confidence interval:
+
+
+```{r}
+#Generating 1000 bootstrapped samples
+ate_satvis04 <- satvis04 |> 
+  mutate(div_stat = ifelse(divorced_vs_never == 1, "Divorced", "Never Married")) |> 
+  specify(sat_adjust04 ~ div_stat) |> 
+  generate(reps = 1000, type = "bootstrap") |> 
+  calculate(stat = "diff in means", 
+            order = c("Divorced","Never Married"))
+
+#Getting a 90% confidence interval from those samples
+ate_satvis04_ci_90 <- ate_satvis04 |> 
+  get_confidence_interval(level = 0.90, type = "percentile")
+
+#Displaying the confidence interval
+knitr::kable(ate_satvis04_ci_90, 
+             col.names = c("Lower CI", "Upper CI"),
+             digits = 2,
+             align = 'c')
+
+```
+We can see that an ATE of 0 falls outside of a 90% confidence interval, which corresponds to an alpha of 0.1.
+
+```{r}
+#Getting a 95% confidence interval from those samples
+ate_satvis04_ci_95 <- ate_satvis04 |> 
+  get_confidence_interval(level = 0.95, type = "percentile")
+
+#Displaying the confidence interval
+knitr::kable(ate_satvis04_ci_95, 
+             col.names = c("Lower CI", "Upper CI"),
+             digits = 2,
+             align = 'c')
+
+```
+An ATE of 0 does, however, fall within a 95% confidence interval, which corresponds to an alpha of 0.05. Still, however, the most interesting regression remains the regression with controls for age, race, and income, which shows statistical signficance with an alpha of 0.05.
 
 
 
@@ -66,9 +324,13 @@ div_nev_men <- men |> filter(marstat == "Divorced or annulled" | marstat == "Nev
 
 visit04_1 <- div_nev_men |> filter(NRVISIT04 != "NA" & NRVISIT04 != "Not ascertained") |> mutate(visit_bool_04_1 = case_when(NRVISIT04 == "Not at all" ~ 0, NRVISIT04 == "Less than once a week" ~ 0.5, NRVISIT04 == "About once a week" ~ 1, NRVISIT04 == "Several times a week" ~ 3, NRVISIT04 == "Every day (at least once a day)" ~ 7))
 
-visit04_2 <- div_nev_men |> filter(NRVISIT04 != "NA" & NRVISIT04 != "Not ascertained") |> mutate(visit_bool_04_2 = case_when(NRVISIT04 == "Not at all" ~ 0, NRVISIT04 == "Less than once a week" ~ 0.3, NRVISIT04 == "About once a week" ~ 1, NRVISIT04 == "Several times a week" ~ 3, NRVISIT04 == "Every day (at least once a day)" ~ 7))
+visit04_2 <- div_nev_men |> filter(NRVISIT04 != "NA" & NRVISIT04 != "Not ascertained") |> mutate(visit_bool_04_2 = case_when(NRVISIT04 == "Not at all" ~ 0, NRVISIT04 == "Less than once a week" ~ 0.4, NRVISIT04 == "About once a week" ~ 1, NRVISIT04 == "Several times a week" ~ 3, NRVISIT04 == "Every day (at least once a day)" ~ 7))
 
-visit04_3 <- div_nev_men |> filter(NRVISIT04 != "NA" & NRVISIT04 != "Not ascertained") |> mutate(visit_bool_04_3 = case_when(NRVISIT04 == "Not at all" ~ 0, NRVISIT04 == "Less than once a week" ~ 0.1, NRVISIT04 == "About once a week" ~ 1, NRVISIT04 == "Several times a week" ~ 3, NRVISIT04 == "Every day (at least once a day)" ~ 7))
+visit04_3 <- div_nev_men |> filter(NRVISIT04 != "NA" & NRVISIT04 != "Not ascertained") |> mutate(visit_bool_04_3 = case_when(NRVISIT04 == "Not at all" ~ 0, NRVISIT04 == "Less than once a week" ~ 0.3, NRVISIT04 == "About once a week" ~ 1, NRVISIT04 == "Several times a week" ~ 3, NRVISIT04 == "Every day (at least once a day)" ~ 7))
+
+visit04_4 <- div_nev_men |> filter(NRVISIT04 != "NA" & NRVISIT04 != "Not ascertained") |> mutate(visit_bool_04_4 = case_when(NRVISIT04 == "Not at all" ~ 0, NRVISIT04 == "Less than once a week" ~ 0.2, NRVISIT04 == "About once a week" ~ 1, NRVISIT04 == "Several times a week" ~ 3, NRVISIT04 == "Every day (at least once a day)" ~ 7))
+
+visit04_5 <- div_nev_men |> filter(NRVISIT04 != "NA" & NRVISIT04 != "Not ascertained") |> mutate(visit_bool_04_5 = case_when(NRVISIT04 == "Not at all" ~ 0, NRVISIT04 == "Less than once a week" ~ 0.1, NRVISIT04 == "About once a week" ~ 1, NRVISIT04 == "Several times a week" ~ 3, NRVISIT04 == "Every day (at least once a day)" ~ 7))
 
 #Running a regression. Adding age, race, and income. 
 

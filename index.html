@@ -115,7 +115,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <!--/radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-resource-manifest">
-  {"type":"character","attributes":{},"value":["data/csv_2017_2019_Male.csv","index_files/anchor-4.2.2/anchor.min.js","index_files/bowser-1.9.3/bowser.min.js","index_files/distill-2.2.21/template.v2.js","index_files/figure-html5/unnamed-chunk-1-1.png","index_files/figure-html5/unnamed-chunk-2-1.png","index_files/figure-html5/unnamed-chunk-3-1.png","index_files/figure-html5/unnamed-chunk-3-2.png","index_files/figure-html5/unnamed-chunk-3-3.png","index_files/figure-html5/unnamed-chunk-4-1.png","index_files/figure-html5/unnamed-chunk-4-2.png","index_files/figure-html5/unnamed-chunk-4-3.png","index_files/figure-html5/unnamed-chunk-4-4.png","index_files/figure-html5/unnamed-chunk-4-5.png","index_files/figure-html5/unnamed-chunk-6-1.png","index_files/header-attrs-2.17/header-attrs.js","index_files/header-attrs-2.24/header-attrs.js","index_files/jquery-3.6.0/jquery-3.6.0.js","index_files/jquery-3.6.0/jquery-3.6.0.min.js","index_files/jquery-3.6.0/jquery-3.6.0.min.map","index_files/kePrint-0.0.1/kePrint.js","index_files/lightable-0.0.1/lightable.css","index_files/popper-2.6.0/popper.min.js","index_files/tippy-6.2.7/tippy-bundle.umd.min.js","index_files/tippy-6.2.7/tippy-light-border.css","index_files/tippy-6.2.7/tippy.css","index_files/tippy-6.2.7/tippy.umd.min.js","index_files/webcomponents-2.0.0/webcomponents.js"]}
+  {"type":"character","attributes":{},"value":["data/csv_2017_2019_Male.csv","index_files/anchor-4.2.2/anchor.min.js","index_files/bowser-1.9.3/bowser.min.js","index_files/distill-2.2.21/template.v2.js","index_files/figure-html5/unnamed-chunk-1-1.png","index_files/figure-html5/unnamed-chunk-12-1.png","index_files/figure-html5/unnamed-chunk-12-2.png","index_files/figure-html5/unnamed-chunk-12-3.png","index_files/figure-html5/unnamed-chunk-12-4.png","index_files/figure-html5/unnamed-chunk-12-5.png","index_files/figure-html5/unnamed-chunk-14-1.png","index_files/figure-html5/unnamed-chunk-2-1.png","index_files/figure-html5/unnamed-chunk-3-1.png","index_files/figure-html5/unnamed-chunk-3-2.png","index_files/figure-html5/unnamed-chunk-3-3.png","index_files/figure-html5/unnamed-chunk-4-1.png","index_files/figure-html5/unnamed-chunk-4-2.png","index_files/figure-html5/unnamed-chunk-4-3.png","index_files/figure-html5/unnamed-chunk-4-4.png","index_files/figure-html5/unnamed-chunk-4-5.png","index_files/figure-html5/unnamed-chunk-5-1.png","index_files/figure-html5/unnamed-chunk-6-1.png","index_files/figure-html5/unnamed-chunk-8-1.png","index_files/header-attrs-2.17/header-attrs.js","index_files/header-attrs-2.24/header-attrs.js","index_files/jquery-3.6.0/jquery-3.6.0.js","index_files/jquery-3.6.0/jquery-3.6.0.min.js","index_files/jquery-3.6.0/jquery-3.6.0.min.map","index_files/kePrint-0.0.1/kePrint.js","index_files/lightable-0.0.1/lightable.css","index_files/popper-2.6.0/popper.min.js","index_files/tippy-6.2.7/tippy-bundle.umd.min.js","index_files/tippy-6.2.7/tippy-light-border.css","index_files/tippy-6.2.7/tippy.css","index_files/tippy-6.2.7/tippy.umd.min.js","index_files/webcomponents-2.0.0/webcomponents.js"]}
   </script>
   <!--radix_placeholder_navigation_in_header-->
   <!--/radix_placeholder_navigation_in_header-->
@@ -1532,26 +1532,1308 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <span><span class='va'>men</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://readr.tidyverse.org/reference/read_delim.html'>read_csv</a></span><span class='op'>(</span><span class='st'>"data/csv_2017_2019_Male.csv"</span><span class='op'>)</span></span>
 <span></span>
 <span><span class='co'>#Cleaning the Data</span></span>
-<span><span class='co'>#--&gt;Filtering for only men who were never married or were divorced. Coding a binary variable to represent those two marriage statuses and recoding age as a numeric value. </span></span>
+<span><span class='co'>#Filtering for only men who were never married or were divorced. </span></span>
+<span><span class='co'>#Coding a binary variable to represent those two marriage statuses</span></span>
+<span><span class='co'>#Recoding age as a numeric value. </span></span>
 <span><span class='va'>div_nev_men</span> <span class='op'>&lt;-</span> <span class='va'>men</span> <span class='op'>|&gt;</span> </span>
 <span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>marstat</span> <span class='op'>==</span> <span class='st'>"Divorced or annulled"</span> <span class='op'>|</span> <span class='va'>marstat</span> <span class='op'>==</span> <span class='st'>"Never been married"</span><span class='op'>)</span> <span class='op'>|&gt;</span>  </span>
-<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>divorced_vs_never <span class='op'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/case_when.html'>case_when</a></span><span class='op'>(</span><span class='va'>marstat</span> <span class='op'>==</span> <span class='st'>"Divorced or annulled"</span><span class='op'>~</span> <span class='fl'>1</span>, <span class='va'>marstat</span> <span class='op'>==</span> <span class='st'>"Never been married"</span> <span class='op'>~</span> <span class='fl'>0</span><span class='op'>)</span>, age_num <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/grep.html'>gsub</a></span><span class='op'>(</span><span class='st'>"[^0-9]"</span>, <span class='st'>""</span>, <span class='va'>AGE_A</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span></span></code></pre>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>divorced_vs_never <span class='op'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/case_when.html'>case_when</a></span><span class='op'>(</span><span class='va'>marstat</span> <span class='op'>==</span> <span class='st'>"Divorced or annulled"</span><span class='op'>~</span> <span class='fl'>1</span>, </span>
+<span>                                       <span class='va'>marstat</span> <span class='op'>==</span> <span class='st'>"Never been married"</span> <span class='op'>~</span> <span class='fl'>0</span><span class='op'>)</span>, </span>
+<span>         age_num <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/grep.html'>gsub</a></span><span class='op'>(</span><span class='st'>"[^0-9]"</span>, <span class='st'>""</span>, <span class='va'>AGE_A</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span></span></code></pre>
 </div>
 </div>
-<p>To answer this question, I looked at two different dependent variables. While the survey reports many different metrics for parental engagement such as going on errands, accompanying children to appointments, showing physical affection, spending play time, reading books, and eating meals, the variable that seemed most logical to summarize engagement was number of visits per week. Below is the distribution of that variable for both types of fathers:</p>
+<p>To answer this question, I looked at two different dependent variables: number of visits and satisfaction with those visits. This is a cross-sectional study, as we are looking at two groups of survey respondents at one point in time.</p>
+<p>While the survey reports many different metrics for parental engagement such as going on errands, accompanying children to appointments, showing physical affection, spending play time, reading books, and eating meals, the variable that seemed most logical to summarize these more objective metrics of engagement was number of visits per week. To measure the subjective experience of these fathers, the satisfaction with these visits made sense. I am examining the data collected only for fathers of children ages 0-4 (this limitation is explained in my conclusion). Below is the distribution of number of visits for both types of fathers:</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'>#Recoding the survey answers into numerical values for visits per week</span></span>
 <span><span class='va'>visit04_1</span> <span class='op'>&lt;-</span> <span class='va'>div_nev_men</span> <span class='op'>|&gt;</span> </span>
 <span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>NRVISIT04</span> <span class='op'>!=</span> <span class='st'>"NA"</span> <span class='op'>&amp;</span> <span class='va'>NRVISIT04</span> <span class='op'>!=</span> <span class='st'>"Not ascertained"</span><span class='op'>)</span> <span class='op'>|&gt;</span> </span>
-<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>visit_bool_04_1 <span class='op'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/case_when.html'>case_when</a></span><span class='op'>(</span><span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"Not at all"</span> <span class='op'>~</span> <span class='fl'>0</span>, <span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"Less than once a week"</span> <span class='op'>~</span> <span class='fl'>0.5</span>, <span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"About once a week"</span> <span class='op'>~</span> <span class='fl'>1</span>, <span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"Several times a week"</span> <span class='op'>~</span> <span class='fl'>3</span>, <span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"Every day (at least once a day)"</span> <span class='op'>~</span> <span class='fl'>7</span><span class='op'>)</span><span class='op'>)</span></span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>visit_bool_04_1 <span class='op'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/case_when.html'>case_when</a></span><span class='op'>(</span><span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"Not at all"</span> <span class='op'>~</span> <span class='fl'>0</span>, </span>
+<span>                                     <span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"Less than once a week"</span> <span class='op'>~</span> <span class='fl'>0.5</span>, </span>
+<span>                                     <span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"About once a week"</span> <span class='op'>~</span> <span class='fl'>1</span>, </span>
+<span>                                     <span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"Several times a week"</span> <span class='op'>~</span> <span class='fl'>3</span>, </span>
+<span>                                     <span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"Every day (at least once a day)"</span> <span class='op'>~</span> <span class='fl'>7</span><span class='op'>)</span><span class='op'>)</span></span>
 <span></span>
 <span><span class='co'>#Visualization of number of visits per week</span></span>
 <span><span class='va'>visit04_1</span> <span class='op'>|&gt;</span> </span>
-<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x<span class='op'>=</span><span class='va'>visit_bool_04_1</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_histogram.html'>geom_histogram</a></span><span class='op'>(</span>binwidth <span class='op'>=</span> <span class='fl'>0.5</span>, fill <span class='op'>=</span> <span class='st'>"#004080"</span><span class='op'>)</span> <span class='op'>+</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='op'>(</span>title <span class='op'>=</span> <span class='st'>"Distribution of visits per week, both types of non-coresidential fathers"</span>, x <span class='op'>=</span> <span class='st'>"Visits per Week"</span>, y <span class='op'>=</span> <span class='st'>"Count"</span><span class='op'>)</span></span></code></pre>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x<span class='op'>=</span><span class='va'>visit_bool_04_1</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span> </span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_histogram.html'>geom_histogram</a></span><span class='op'>(</span>binwidth <span class='op'>=</span> <span class='fl'>0.5</span>, fill <span class='op'>=</span> <span class='st'>"#004080"</span><span class='op'>)</span> <span class='op'>+</span> </span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='op'>(</span>title <span class='op'>=</span> <span class='st'>"Distribution of visits per week, both types of non-coresidential fathers"</span>, </span>
+<span>       x <span class='op'>=</span> <span class='st'>"Visits per Week"</span>, </span>
+<span>       y <span class='op'>=</span> <span class='st'>"Count"</span><span class='op'>)</span></span></code></pre>
 </div>
 <p><img src="index_files/figure-html5/unnamed-chunk-2-1.png" width="624" /></p>
 </div>
+<p>And here is the distribution for satisfaction of visits:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'>#Cleaning the satisfaction variable, no arbitrary judgements had to be made however</span></span>
+<span><span class='va'>satvis04</span> <span class='op'>&lt;-</span> <span class='va'>div_nev_men</span> <span class='op'>|&gt;</span> </span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>NRSATVIS04</span> <span class='op'>!=</span> <span class='st'>"Refused"</span> <span class='op'>&amp;</span> </span>
+<span>           <span class='va'>NRSATVIS04</span> <span class='op'>!=</span> <span class='st'>"Don't know"</span> <span class='op'>&amp;</span> </span>
+<span>           <span class='va'>NRSATVIS04</span> <span class='op'>!=</span> <span class='st'>"Not ascertained"</span><span class='op'>)</span> <span class='op'>|&gt;</span> </span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>sat_adjust04 <span class='op'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/case_when.html'>case_when</a></span><span class='op'>(</span><span class='va'>NRSATVIS04</span> <span class='op'>==</span> <span class='st'>"Very satisfied"</span> <span class='op'>~</span> <span class='fl'>10</span>, </span>
+<span>                                  <span class='va'>NRSATVIS04</span> <span class='op'>==</span> <span class='st'>"Very dissatisfied"</span> <span class='op'>~</span> <span class='fl'>1</span>, </span>
+<span>                                  <span class='cn'>TRUE</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='va'>NRSATVIS04</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>satvis04</span> <span class='op'>|&gt;</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x<span class='op'>=</span><span class='va'>sat_adjust04</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span> </span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_histogram.html'>geom_histogram</a></span><span class='op'>(</span>fill <span class='op'>=</span> <span class='st'>"#004080"</span>, binwidth <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span> <span class='op'>+</span> </span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='op'>(</span>title <span class='op'>=</span> <span class='st'>"Distribution of satisfaction with visits, both types of non-coresidential fathers"</span>,</span>
+<span>       x <span class='op'>=</span> <span class='st'>"Satisfaction, rated 0-10"</span>,</span>
+<span>       y <span class='op'>=</span> <span class='st'>"Count"</span><span class='op'>)</span> </span></code></pre>
+</div>
+<p><img src="index_files/figure-html5/unnamed-chunk-3-1.png" width="624" /></p>
+</div>
+<h1 id="results">Results</h1>
+<p>I first ran a regression with visits per week as the dependent variable and the marital status of the non-coresidential father as an independent binary variable. I’ve included age, race, and income into the regression as controls, but unfortunately that does make the output table annoyingly long.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'>#Regression</span></span>
+<span><span class='va'>regression_visit04_1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>visit_bool_04_1</span> <span class='op'>~</span> <span class='va'>divorced_vs_never</span> <span class='op'>+</span> </span>
+<span>                             <span class='va'>age_num</span> <span class='op'>+</span> </span>
+<span>                             <span class='va'>race</span> <span class='op'>+</span> </span>
+<span>                             <span class='va'>totincr</span>, </span>
+<span>                           data <span class='op'>=</span> <span class='va'>visit04_1</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='co'>#Outputting the model</span></span>
+<span><span class='fu'>modelsummary</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/modelsummary/man/modelsummary.html'>modelsummary</a></span><span class='op'>(</span><span class='va'>regression_visit04_1</span>, statistic <span class='op'>=</span> </span>
+<span>                             <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"s.e. = {std.error}"</span>,</span>
+<span>                                         <span class='st'>"p = {p.value}"</span><span class='op'>)</span>, </span>
+<span>                           gof_map <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"nobs"</span>, <span class='st'>"r.squared"</span>, <span class='st'>"adj.r.squared"</span><span class='op'>)</span><span class='op'>)</span></span></code></pre>
+</div>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:center;">
+ (1)
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:center;">
+1.996
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+s.e. = 2.900
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+p = 0.493
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+divorced_vs_never
+</td>
+<td style="text-align:center;">
+−0.240
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+s.e. = 0.701
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+p = 0.733
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+age_num
+</td>
+<td style="text-align:center;">
+−0.003
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+s.e. = 0.037
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+p = 0.929
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+raceother
+</td>
+<td style="text-align:center;">
+1.096
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+s.e. = 1.287
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+p = 0.397
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+racewhite
+</td>
+<td style="text-align:center;">
+−0.939
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+s.e. = 0.586
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+p = 0.113
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+totincr$100,000 or more
+</td>
+<td style="text-align:center;">
+1.120
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+s.e. = 2.843
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+p = 0.695
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+totincr$12,500-$14,999
+</td>
+<td style="text-align:center;">
+1.128
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+s.e. = 2.762
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+p = 0.684
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+totincr$15,000-$19,999
+</td>
+<td style="text-align:center;">
+0.841
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+s.e. = 2.902
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+p = 0.773
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+totincr$20,000-$24,999
+</td>
+<td style="text-align:center;">
+1.138
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+s.e. = 2.728
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+p = 0.678
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+totincr$25,000-$29,999
+</td>
+<td style="text-align:center;">
+0.248
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+s.e. = 2.684
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+p = 0.927
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+totincr$30,000-$34,999
+</td>
+<td style="text-align:center;">
+−0.004
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+s.e. = 2.769
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+p = 0.999
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+totincr$35,000-$39,999
+</td>
+<td style="text-align:center;">
+1.269
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+s.e. = 2.761
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+p = 0.647
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+totincr$40,000-$49,999
+</td>
+<td style="text-align:center;">
+−0.602
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+s.e. = 2.786
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+p = 0.830
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+totincr$50,000-$59,999
+</td>
+<td style="text-align:center;">
+2.812
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+s.e. = 2.678
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+p = 0.297
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+totincr$5000-$7499
+</td>
+<td style="text-align:center;">
+−0.412
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+s.e. = 2.982
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+p = 0.890
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+totincr$60,000-$74,999
+</td>
+<td style="text-align:center;">
+1.099
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+s.e. = 2.974
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+p = 0.713
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+totincr$75,000-$99,999
+</td>
+<td style="text-align:center;">
+1.591
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+s.e. = 2.791
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+p = 0.570
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+totincr$7500-$9999
+</td>
+<td style="text-align:center;">
+1.143
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+s.e. = 3.546
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+p = 0.748
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+totincrUnder $5000
+</td>
+<td style="text-align:center;">
+0.815
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+s.e. = 2.702
+</td>
+</tr>
+<tr>
+<td style="text-align:left;box-shadow: 0px 1.5px">
+</td>
+<td style="text-align:center;box-shadow: 0px 1.5px">
+p = 0.764
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Num.Obs.
+</td>
+<td style="text-align:center;">
+95
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+R2
+</td>
+<td style="text-align:center;">
+0.217
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+R2 Adj.
+</td>
+<td style="text-align:center;">
+0.032
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>As it is a binary regression, the coefficient on our independent variable, divorced_vs_never, represents the difference in means of our dependent variable, visits per week, controlling for age, race, and income. According to the regression, the difference in the average value of visits per week between divorced fathers and never married fathers is -0.240. This means that divorced fathers see their kids 0.24 times per week less than never married fathers. However, the p-value for this regression is 0.733. This does not meet any threshold for statistical significance, and so we cannot take this difference in means to be statistically significant. There is thus nothing that we can really say about a significant average difference in visits for the two groups of father.<strong>MENTION IN CONCLUSION ABOUT NOBS AND ADJUSTED R SQUARED</strong></p>
+<p>One abritrary decision that I had to make when refactoring the survey answers into numerical measures of visits per week is how to assign a number to answers like “Less than once a week” or “Several times a week.” The most arbitrary decision I felt was for the former, for answers of “Less than once a week” which I first assigned a value of 0.5 visits per week. I wanted to conduct a robustness test on this decision to see if assigning a different value would provide a different outcome in the regression:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'>#Robustness testing</span></span>
+<span></span>
+<span></span>
+<span><span class='co'>#Recoding the visit variable in five different ways</span></span>
+<span><span class='co'>#Decreasing the value for "Less than once a week" by 0.1 each time</span></span>
+<span><span class='va'>visit04_1</span> <span class='op'>&lt;-</span> <span class='va'>div_nev_men</span> <span class='op'>|&gt;</span> </span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>NRVISIT04</span> <span class='op'>!=</span> <span class='st'>"NA"</span> <span class='op'>&amp;</span> <span class='va'>NRVISIT04</span> <span class='op'>!=</span> <span class='st'>"Not ascertained"</span><span class='op'>)</span> <span class='op'>|&gt;</span> </span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>visit_bool_04_1 <span class='op'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/case_when.html'>case_when</a></span><span class='op'>(</span><span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"Not at all"</span> <span class='op'>~</span> <span class='fl'>0</span>, </span>
+<span>                                     <span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"Less than once a week"</span> <span class='op'>~</span> <span class='fl'>0.5</span>, </span>
+<span>                                     <span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"About once a week"</span> <span class='op'>~</span> <span class='fl'>1</span>, </span>
+<span>                                     <span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"Several times a week"</span> <span class='op'>~</span> <span class='fl'>3</span>, </span>
+<span>                                     <span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"Every day (at least once a day)"</span> <span class='op'>~</span> <span class='fl'>7</span><span class='op'>)</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>visit04_2</span> <span class='op'>&lt;-</span> <span class='va'>div_nev_men</span> <span class='op'>|&gt;</span> </span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>NRVISIT04</span> <span class='op'>!=</span> <span class='st'>"NA"</span> <span class='op'>&amp;</span> <span class='va'>NRVISIT04</span> <span class='op'>!=</span> <span class='st'>"Not ascertained"</span><span class='op'>)</span> <span class='op'>|&gt;</span> </span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>visit_bool_04_2 <span class='op'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/case_when.html'>case_when</a></span><span class='op'>(</span><span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"Not at all"</span> <span class='op'>~</span> <span class='fl'>0</span>, </span>
+<span>                                     <span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"Less than once a week"</span> <span class='op'>~</span> <span class='fl'>0.4</span>, </span>
+<span>                                     <span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"About once a week"</span> <span class='op'>~</span> <span class='fl'>1</span>, </span>
+<span>                                     <span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"Several times a week"</span> <span class='op'>~</span> <span class='fl'>3</span>, </span>
+<span>                                     <span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"Every day (at least once a day)"</span> <span class='op'>~</span> <span class='fl'>7</span><span class='op'>)</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>visit04_3</span> <span class='op'>&lt;-</span> <span class='va'>div_nev_men</span> <span class='op'>|&gt;</span> </span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>NRVISIT04</span> <span class='op'>!=</span> <span class='st'>"NA"</span> <span class='op'>&amp;</span> <span class='va'>NRVISIT04</span> <span class='op'>!=</span> <span class='st'>"Not ascertained"</span><span class='op'>)</span> <span class='op'>|&gt;</span> </span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>visit_bool_04_3 <span class='op'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/case_when.html'>case_when</a></span><span class='op'>(</span><span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"Not at all"</span> <span class='op'>~</span> <span class='fl'>0</span>, </span>
+<span>                                     <span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"Less than once a week"</span> <span class='op'>~</span> <span class='fl'>0.3</span>, </span>
+<span>                                     <span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"About once a week"</span> <span class='op'>~</span> <span class='fl'>1</span>, </span>
+<span>                                     <span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"Several times a week"</span> <span class='op'>~</span> <span class='fl'>3</span>, </span>
+<span>                                     <span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"Every day (at least once a day)"</span> <span class='op'>~</span> <span class='fl'>7</span><span class='op'>)</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>visit04_4</span> <span class='op'>&lt;-</span> <span class='va'>div_nev_men</span> <span class='op'>|&gt;</span> </span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>NRVISIT04</span> <span class='op'>!=</span> <span class='st'>"NA"</span> <span class='op'>&amp;</span> <span class='va'>NRVISIT04</span> <span class='op'>!=</span> <span class='st'>"Not ascertained"</span><span class='op'>)</span> <span class='op'>|&gt;</span> </span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>visit_bool_04_4 <span class='op'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/case_when.html'>case_when</a></span><span class='op'>(</span><span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"Not at all"</span> <span class='op'>~</span> <span class='fl'>0</span>, </span>
+<span>                                     <span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"Less than once a week"</span> <span class='op'>~</span> <span class='fl'>0.2</span>, </span>
+<span>                                     <span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"About once a week"</span> <span class='op'>~</span> <span class='fl'>1</span>, </span>
+<span>                                     <span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"Several times a week"</span> <span class='op'>~</span> <span class='fl'>3</span>, </span>
+<span>                                     <span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"Every day (at least once a day)"</span> <span class='op'>~</span> <span class='fl'>7</span><span class='op'>)</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>visit04_5</span> <span class='op'>&lt;-</span> <span class='va'>div_nev_men</span> <span class='op'>|&gt;</span> </span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>NRVISIT04</span> <span class='op'>!=</span> <span class='st'>"NA"</span> <span class='op'>&amp;</span> <span class='va'>NRVISIT04</span> <span class='op'>!=</span> <span class='st'>"Not ascertained"</span><span class='op'>)</span> <span class='op'>|&gt;</span> </span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>visit_bool_04_5 <span class='op'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/case_when.html'>case_when</a></span><span class='op'>(</span><span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"Not at all"</span> <span class='op'>~</span> <span class='fl'>0</span>, </span>
+<span>                                     <span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"Less than once a week"</span> <span class='op'>~</span> <span class='fl'>0.1</span>, </span>
+<span>                                     <span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"About once a week"</span> <span class='op'>~</span> <span class='fl'>1</span>, </span>
+<span>                                     <span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"Several times a week"</span> <span class='op'>~</span> <span class='fl'>3</span>, </span>
+<span>                                     <span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"Every day (at least once a day)"</span> <span class='op'>~</span> <span class='fl'>7</span><span class='op'>)</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='co'>#Running a regression for each of the different recodes</span></span>
+<span><span class='va'>regression_visit04_1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>visit_bool_04_1</span> <span class='op'>~</span> <span class='va'>divorced_vs_never</span> <span class='op'>+</span> </span>
+<span>                             <span class='va'>age_num</span> <span class='op'>+</span> </span>
+<span>                             <span class='va'>race</span> <span class='op'>+</span> </span>
+<span>                             <span class='va'>totincr</span>, </span>
+<span>                           data <span class='op'>=</span> <span class='va'>visit04_1</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>regression_visit04_2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>visit_bool_04_2</span> <span class='op'>~</span> <span class='va'>divorced_vs_never</span> <span class='op'>+</span> </span>
+<span>                             <span class='va'>age_num</span> <span class='op'>+</span> </span>
+<span>                             <span class='va'>race</span> <span class='op'>+</span> </span>
+<span>                             <span class='va'>totincr</span>, </span>
+<span>                           data <span class='op'>=</span> <span class='va'>visit04_2</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>regression_visit04_3</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>visit_bool_04_3</span> <span class='op'>~</span> <span class='va'>divorced_vs_never</span> <span class='op'>+</span> </span>
+<span>                             <span class='va'>age_num</span> <span class='op'>+</span> </span>
+<span>                             <span class='va'>race</span> <span class='op'>+</span> </span>
+<span>                             <span class='va'>totincr</span>, </span>
+<span>                           data <span class='op'>=</span> <span class='va'>visit04_3</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>regression_visit04_4</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>visit_bool_04_4</span> <span class='op'>~</span> <span class='va'>divorced_vs_never</span> <span class='op'>+</span> </span>
+<span>                             <span class='va'>age_num</span> <span class='op'>+</span> </span>
+<span>                             <span class='va'>race</span> <span class='op'>+</span> </span>
+<span>                             <span class='va'>totincr</span>, </span>
+<span>                           data <span class='op'>=</span> <span class='va'>visit04_4</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>regression_visit04_5</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>visit_bool_04_5</span> <span class='op'>~</span> <span class='va'>divorced_vs_never</span> <span class='op'>+</span> </span>
+<span>                             <span class='va'>age_num</span> <span class='op'>+</span> </span>
+<span>                             <span class='va'>race</span> <span class='op'>+</span> </span>
+<span>                             <span class='va'>totincr</span>, </span>
+<span>                           data <span class='op'>=</span> <span class='va'>visit04_5</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='co'>#Adding the reported p-value from each regression into a list</span></span>
+<span><span class='va'>coefficients</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>regression_visit04_1</span><span class='op'>)</span><span class='op'>$</span><span class='va'>coefficients</span><span class='op'>[</span><span class='st'>"divorced_vs_never"</span>, <span class='st'>"Pr(&gt;|t|)"</span><span class='op'>]</span></span>
+<span></span>
+<span><span class='va'>coefficients</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/append.html'>append</a></span><span class='op'>(</span><span class='va'>coefficients</span>, <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>regression_visit04_2</span><span class='op'>)</span><span class='op'>$</span></span>
+<span>                         <span class='va'>coefficients</span><span class='op'>[</span><span class='st'>"divorced_vs_never"</span>, <span class='st'>"Pr(&gt;|t|)"</span><span class='op'>]</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>coefficients</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/append.html'>append</a></span><span class='op'>(</span><span class='va'>coefficients</span>, <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>regression_visit04_3</span><span class='op'>)</span><span class='op'>$</span></span>
+<span>                         <span class='va'>coefficients</span><span class='op'>[</span><span class='st'>"divorced_vs_never"</span>, <span class='st'>"Pr(&gt;|t|)"</span><span class='op'>]</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>coefficients</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/append.html'>append</a></span><span class='op'>(</span><span class='va'>coefficients</span>, <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>regression_visit04_4</span><span class='op'>)</span><span class='op'>$</span></span>
+<span>                         <span class='va'>coefficients</span><span class='op'>[</span><span class='st'>"divorced_vs_never"</span>, <span class='st'>"Pr(&gt;|t|)"</span><span class='op'>]</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>coefficients</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/append.html'>append</a></span><span class='op'>(</span><span class='va'>coefficients</span>, <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>regression_visit04_5</span><span class='op'>)</span><span class='op'>$</span></span>
+<span>                         <span class='va'>coefficients</span><span class='op'>[</span><span class='st'>"divorced_vs_never"</span>, <span class='st'>"Pr(&gt;|t|)"</span><span class='op'>]</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='co'>#Also making a list of the different values set for "Less than once a week"</span></span>
+<span><span class='va'>adjusted_values</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.5</span>, <span class='fl'>0.4</span>, <span class='fl'>0.3</span>, <span class='fl'>0.2</span>, <span class='fl'>0.1</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='co'>#Making a tibble out of the two lists we just created</span></span>
+<span><span class='va'>robustness_test</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://tibble.tidyverse.org/reference/tibble.html'>tibble</a></span><span class='op'>(</span><span class='va'>coefficients</span>, <span class='va'>adjusted_values</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='co'>#Visualizing the test</span></span>
+<span><span class='va'>robustness_test</span> <span class='op'>|&gt;</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x<span class='op'>=</span><span class='va'>adjusted_values</span>, y <span class='op'>=</span> <span class='va'>coefficients</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span> </span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='op'>(</span>color <span class='op'>=</span> <span class='st'>"#004080"</span><span class='op'>)</span> <span class='op'>+</span> </span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='op'>(</span>title <span class='op'>=</span> <span class='st'>"Robustness Test For Recoding the Dependent Variable Visits per Week"</span>, </span>
+<span>       x <span class='op'>=</span> <span class='st'>"Adjusted Numeric Value"</span>, </span>
+<span>       y <span class='op'>=</span> <span class='st'>"P-Value of the Resulting Regression"</span><span class='op'>)</span></span></code></pre>
+</div>
+<p><img src="index_files/figure-html5/unnamed-chunk-5-1.png" width="624" /></p>
+</div>
+<p>As we can see from the robustness test, adjusting the numerical values that correspond to “Less than once a week” does make a difference to the statistical significance, the most statistically significant difference came from but it does not come close to a measure of statistical significance (even an alpha of 0.1)</p>
+<p>The difference in number of visits between the two groups of fathers was thus ultimately statistically insignificant (further discussion in results below), but there is a statistically significant difference in the self-reported satisfaction with visits. Here is the regression for satisfaction with visits, controlling for age, race, and income:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'>#Regression for satisfaction</span></span>
+<span><span class='co'>#Using the previously calculated dependent variable sat_adjust04</span></span>
+<span><span class='va'>regression_satvis04</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>sat_adjust04</span> <span class='op'>~</span> <span class='va'>divorced_vs_never</span> <span class='op'>+</span> </span>
+<span>                            <span class='va'>age_num</span> <span class='op'>+</span> </span>
+<span>                            <span class='va'>race</span> <span class='op'>+</span> </span>
+<span>                            <span class='va'>totincr</span>, </span>
+<span>                          data <span class='op'>=</span> <span class='va'>satvis04</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='co'>#Displaying the regression</span></span>
+<span><span class='fu'>modelsummary</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/modelsummary/man/modelsummary.html'>modelsummary</a></span><span class='op'>(</span><span class='va'>regression_satvis04</span>, </span>
+<span>                           statistic <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"s.e. = {std.error}"</span>,</span>
+<span>                                         <span class='st'>"p = {p.value}"</span><span class='op'>)</span>, </span>
+<span>                           gof_map <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"nobs"</span>, <span class='st'>"r.squared"</span>, <span class='st'>"adj.r.squared"</span><span class='op'>)</span><span class='op'>)</span></span></code></pre>
+</div>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:center;">
+ (1)
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:center;">
+7.555
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+s.e. = 4.583
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+p = 0.103
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+divorced_vs_never
+</td>
+<td style="text-align:center;">
+−2.399
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+s.e. = 1.108
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+p = 0.033
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+age_num
+</td>
+<td style="text-align:center;">
+0.016
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+s.e. = 0.058
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+p = 0.782
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+raceother
+</td>
+<td style="text-align:center;">
+−0.005
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+s.e. = 2.035
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+p = 0.998
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+racewhite
+</td>
+<td style="text-align:center;">
+−0.022
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+s.e. = 0.924
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+p = 0.981
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+totincr$100,000 or more
+</td>
+<td style="text-align:center;">
+−2.173
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+s.e. = 4.498
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+p = 0.630
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+totincr$12,500-$14,999
+</td>
+<td style="text-align:center;">
+1.049
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+s.e. = 4.370
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+p = 0.811
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+totincr$15,000-$19,999
+</td>
+<td style="text-align:center;">
+−1.731
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+s.e. = 4.591
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+p = 0.707
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+totincr$20,000-$24,999
+</td>
+<td style="text-align:center;">
+−1.394
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+s.e. = 4.316
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+p = 0.748
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+totincr$25,000-$29,999
+</td>
+<td style="text-align:center;">
+−1.871
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+s.e. = 4.246
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+p = 0.661
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+totincr$30,000-$34,999
+</td>
+<td style="text-align:center;">
+−2.718
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+s.e. = 4.360
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+p = 0.535
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+totincr$35,000-$39,999
+</td>
+<td style="text-align:center;">
+−1.397
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+s.e. = 4.367
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+p = 0.750
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+totincr$40,000-$49,999
+</td>
+<td style="text-align:center;">
+−4.121
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+s.e. = 4.408
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+p = 0.353
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+totincr$50,000-$59,999
+</td>
+<td style="text-align:center;">
+0.431
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+s.e. = 4.237
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+p = 0.919
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+totincr$5000-$7499
+</td>
+<td style="text-align:center;">
+−2.629
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+s.e. = 4.717
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+p = 0.579
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+totincr$60,000-$74,999
+</td>
+<td style="text-align:center;">
+1.984
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+s.e. = 4.706
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+p = 0.674
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+totincr$75,000-$99,999
+</td>
+<td style="text-align:center;">
+0.251
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+s.e. = 4.416
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+p = 0.955
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+totincr$7500-$9999
+</td>
+<td style="text-align:center;">
+−2.230
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+s.e. = 5.609
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+p = 0.692
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+totincrUnder $5000
+</td>
+<td style="text-align:center;">
+−0.625
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+s.e. = 4.274
+</td>
+</tr>
+<tr>
+<td style="text-align:left;box-shadow: 0px 1.5px">
+</td>
+<td style="text-align:center;box-shadow: 0px 1.5px">
+p = 0.884
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Num.Obs.
+</td>
+<td style="text-align:center;">
+96
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+R2
+</td>
+<td style="text-align:center;">
+0.191
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+R2 Adj.
+</td>
+<td style="text-align:center;">
+0.002
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The coefficient on divorced_vs_never in this binary regression represents the difference in means of satisfaction with visits controlling for age, race, and income. According to the regression, the difference in the average reported satisfaction with visits between divorced fathers and never married fathers is -2.399. To interpret this substantively, divorced fathers are roughly two and a half points less satisfied with their visits (on a scale out of ten) than their never married counterparts. The p-value for this regression is 0.033. This meets the threshold for statistical significance with alpha = 0.05.</p>
+<p>Without controls for age, race, and income, the regression (see below) has a statistical significance of 0.062, only meeting the threshold for statistical significance with an alpha of 0.1. The coefficient of divorced_vs_never, the average difference in means between the two groups, is also lower, -1.754 but is still in the same direction, with divorced fathers reporting less satisfaction than fathers who were never married.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'>#Regression without controls</span></span>
+<span><span class='va'>regression_satvis04_no_controls</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>sat_adjust04</span> <span class='op'>~</span> <span class='va'>divorced_vs_never</span>, </span>
+<span>                          data <span class='op'>=</span> <span class='va'>satvis04</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='co'>#Displaying the regression</span></span>
+<span><span class='fu'>modelsummary</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/modelsummary/man/modelsummary.html'>modelsummary</a></span><span class='op'>(</span><span class='va'>regression_satvis04_no_controls</span>, </span>
+<span>                           statistic <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"s.e. = {std.error}"</span>,</span>
+<span>                                         <span class='st'>"p = {p.value}"</span><span class='op'>)</span>, </span>
+<span>                           gof_map <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"nobs"</span>, <span class='st'>"r.squared"</span>, <span class='st'>"adj.r.squared"</span><span class='op'>)</span><span class='op'>)</span></span></code></pre>
+</div>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:center;">
+ (1)
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:center;">
+6.701
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+s.e. = 0.414
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+p = &lt;0.001
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+divorced_vs_never
+</td>
+<td style="text-align:center;">
+−1.754
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+s.e. = 0.930
+</td>
+</tr>
+<tr>
+<td style="text-align:left;box-shadow: 0px 1.5px">
+</td>
+<td style="text-align:center;box-shadow: 0px 1.5px">
+p = 0.062
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Num.Obs.
+</td>
+<td style="text-align:center;">
+96
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+R2
+</td>
+<td style="text-align:center;">
+0.036
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+R2 Adj.
+</td>
+<td style="text-align:center;">
+0.026
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Another way to visualize this difference, without controls for age, race, and income, is to look at a boxplot of the two types of fathers:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'>#First recoding for a Divorced and Never Married category</span></span>
+<span><span class='va'>visualize_satvis04</span> <span class='op'>&lt;-</span> <span class='va'>satvis04</span> <span class='op'>|&gt;</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>div_stat <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/ifelse.html'>ifelse</a></span><span class='op'>(</span><span class='va'>divorced_vs_never</span> <span class='op'>==</span> <span class='fl'>1</span>, <span class='st'>"Divorced"</span>, <span class='st'>"Never Married"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='co'>#Then piping to a ggplot visualization</span></span>
+<span><span class='va'>visualize_satvis04</span> <span class='op'>|&gt;</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>div_stat</span>, y <span class='op'>=</span> <span class='va'>sat_adjust04</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span> </span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_boxplot.html'>geom_boxplot</a></span><span class='op'>(</span>fill <span class='op'>=</span> <span class='st'>"#004080"</span><span class='op'>)</span> <span class='op'>+</span> </span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='op'>(</span>title <span class='op'>=</span> <span class='st'>"Boxplot of Reported Satisfaction for the Two Groups of Fathers"</span>,</span>
+<span>       x <span class='op'>=</span> <span class='st'>"Marriage Status"</span>,</span>
+<span>       y <span class='op'>=</span> <span class='st'>"Reported Satisfaction"</span><span class='op'>)</span></span></code></pre>
+</div>
+<p><img src="index_files/figure-html5/unnamed-chunk-8-1.png" width="624" /></p>
+</div>
+<p>Without controls for age, race, and income, we can also reject the null hypothesis of no difference in means by bootstrapping a confidence interval:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'>#Generating 1000 bootstrapped samples</span></span>
+<span><span class='va'>ate_satvis04</span> <span class='op'>&lt;-</span> <span class='va'>satvis04</span> <span class='op'>|&gt;</span> </span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>div_stat <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/ifelse.html'>ifelse</a></span><span class='op'>(</span><span class='va'>divorced_vs_never</span> <span class='op'>==</span> <span class='fl'>1</span>, <span class='st'>"Divorced"</span>, <span class='st'>"Never Married"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>|&gt;</span> </span>
+<span>  <span class='fu'><a href='https://infer.tidymodels.org/reference/specify.html'>specify</a></span><span class='op'>(</span><span class='va'>sat_adjust04</span> <span class='op'>~</span> <span class='va'>div_stat</span><span class='op'>)</span> <span class='op'>|&gt;</span> </span>
+<span>  <span class='fu'><a href='https://infer.tidymodels.org/reference/generate.html'>generate</a></span><span class='op'>(</span>reps <span class='op'>=</span> <span class='fl'>1000</span>, type <span class='op'>=</span> <span class='st'>"bootstrap"</span><span class='op'>)</span> <span class='op'>|&gt;</span> </span>
+<span>  <span class='fu'><a href='https://infer.tidymodels.org/reference/calculate.html'>calculate</a></span><span class='op'>(</span>stat <span class='op'>=</span> <span class='st'>"diff in means"</span>, </span>
+<span>            order <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Divorced"</span>,<span class='st'>"Never Married"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='co'>#Getting a 90% confidence interval from those samples</span></span>
+<span><span class='va'>ate_satvis04_ci_90</span> <span class='op'>&lt;-</span> <span class='va'>ate_satvis04</span> <span class='op'>|&gt;</span> </span>
+<span>  <span class='fu'><a href='https://infer.tidymodels.org/reference/get_confidence_interval.html'>get_confidence_interval</a></span><span class='op'>(</span>level <span class='op'>=</span> <span class='fl'>0.90</span>, type <span class='op'>=</span> <span class='st'>"percentile"</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='co'>#Displaying the confidence interval</span></span>
+<span><span class='fu'>knitr</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/knitr/man/kable.html'>kable</a></span><span class='op'>(</span><span class='va'>ate_satvis04_ci_90</span>, </span>
+<span>             col.names <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Lower CI"</span>, <span class='st'>"Upper CI"</span><span class='op'>)</span>,</span>
+<span>             digits <span class='op'>=</span> <span class='fl'>2</span>,</span>
+<span>             align <span class='op'>=</span> <span class='st'>'c'</span><span class='op'>)</span></span></code></pre>
+</div>
+<table>
+<thead>
+<tr>
+<th style="text-align:center;">
+Lower CI
+</th>
+<th style="text-align:center;">
+Upper CI
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+-3.3
+</td>
+<td style="text-align:center;">
+-0.15
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>We can see that an ATE of 0 falls outside of a 90% confidence interval, which corresponds to an alpha of 0.1.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'>#Getting a 95% confidence interval from those samples</span></span>
+<span><span class='va'>ate_satvis04_ci_95</span> <span class='op'>&lt;-</span> <span class='va'>ate_satvis04</span> <span class='op'>|&gt;</span> </span>
+<span>  <span class='fu'><a href='https://infer.tidymodels.org/reference/get_confidence_interval.html'>get_confidence_interval</a></span><span class='op'>(</span>level <span class='op'>=</span> <span class='fl'>0.95</span>, type <span class='op'>=</span> <span class='st'>"percentile"</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='co'>#Displaying the confidence interval</span></span>
+<span><span class='fu'>knitr</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/knitr/man/kable.html'>kable</a></span><span class='op'>(</span><span class='va'>ate_satvis04_ci_95</span>, </span>
+<span>             col.names <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Lower CI"</span>, <span class='st'>"Upper CI"</span><span class='op'>)</span>,</span>
+<span>             digits <span class='op'>=</span> <span class='fl'>2</span>,</span>
+<span>             align <span class='op'>=</span> <span class='st'>'c'</span><span class='op'>)</span></span></code></pre>
+</div>
+<table>
+<thead>
+<tr>
+<th style="text-align:center;">
+Lower CI
+</th>
+<th style="text-align:center;">
+Upper CI
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+-3.62
+</td>
+<td style="text-align:center;">
+0.19
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>An ATE of 0 does, however, fall within a 95% confidence interval, which corresponds to an alpha of 0.05. Still, however, the most interesting regression remains the regression with controls for age, race, and income, which shows statistical signficance with an alpha of 0.05.</p>
 <p>#Running a Regression</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
@@ -1569,9 +2851,13 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <span></span>
 <span><span class='va'>visit04_1</span> <span class='op'>&lt;-</span> <span class='va'>div_nev_men</span> <span class='op'>|&gt;</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>NRVISIT04</span> <span class='op'>!=</span> <span class='st'>"NA"</span> <span class='op'>&amp;</span> <span class='va'>NRVISIT04</span> <span class='op'>!=</span> <span class='st'>"Not ascertained"</span><span class='op'>)</span> <span class='op'>|&gt;</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>visit_bool_04_1 <span class='op'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/case_when.html'>case_when</a></span><span class='op'>(</span><span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"Not at all"</span> <span class='op'>~</span> <span class='fl'>0</span>, <span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"Less than once a week"</span> <span class='op'>~</span> <span class='fl'>0.5</span>, <span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"About once a week"</span> <span class='op'>~</span> <span class='fl'>1</span>, <span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"Several times a week"</span> <span class='op'>~</span> <span class='fl'>3</span>, <span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"Every day (at least once a day)"</span> <span class='op'>~</span> <span class='fl'>7</span><span class='op'>)</span><span class='op'>)</span></span>
 <span></span>
-<span><span class='va'>visit04_2</span> <span class='op'>&lt;-</span> <span class='va'>div_nev_men</span> <span class='op'>|&gt;</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>NRVISIT04</span> <span class='op'>!=</span> <span class='st'>"NA"</span> <span class='op'>&amp;</span> <span class='va'>NRVISIT04</span> <span class='op'>!=</span> <span class='st'>"Not ascertained"</span><span class='op'>)</span> <span class='op'>|&gt;</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>visit_bool_04_2 <span class='op'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/case_when.html'>case_when</a></span><span class='op'>(</span><span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"Not at all"</span> <span class='op'>~</span> <span class='fl'>0</span>, <span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"Less than once a week"</span> <span class='op'>~</span> <span class='fl'>0.3</span>, <span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"About once a week"</span> <span class='op'>~</span> <span class='fl'>1</span>, <span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"Several times a week"</span> <span class='op'>~</span> <span class='fl'>3</span>, <span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"Every day (at least once a day)"</span> <span class='op'>~</span> <span class='fl'>7</span><span class='op'>)</span><span class='op'>)</span></span>
+<span><span class='va'>visit04_2</span> <span class='op'>&lt;-</span> <span class='va'>div_nev_men</span> <span class='op'>|&gt;</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>NRVISIT04</span> <span class='op'>!=</span> <span class='st'>"NA"</span> <span class='op'>&amp;</span> <span class='va'>NRVISIT04</span> <span class='op'>!=</span> <span class='st'>"Not ascertained"</span><span class='op'>)</span> <span class='op'>|&gt;</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>visit_bool_04_2 <span class='op'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/case_when.html'>case_when</a></span><span class='op'>(</span><span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"Not at all"</span> <span class='op'>~</span> <span class='fl'>0</span>, <span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"Less than once a week"</span> <span class='op'>~</span> <span class='fl'>0.4</span>, <span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"About once a week"</span> <span class='op'>~</span> <span class='fl'>1</span>, <span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"Several times a week"</span> <span class='op'>~</span> <span class='fl'>3</span>, <span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"Every day (at least once a day)"</span> <span class='op'>~</span> <span class='fl'>7</span><span class='op'>)</span><span class='op'>)</span></span>
 <span></span>
-<span><span class='va'>visit04_3</span> <span class='op'>&lt;-</span> <span class='va'>div_nev_men</span> <span class='op'>|&gt;</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>NRVISIT04</span> <span class='op'>!=</span> <span class='st'>"NA"</span> <span class='op'>&amp;</span> <span class='va'>NRVISIT04</span> <span class='op'>!=</span> <span class='st'>"Not ascertained"</span><span class='op'>)</span> <span class='op'>|&gt;</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>visit_bool_04_3 <span class='op'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/case_when.html'>case_when</a></span><span class='op'>(</span><span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"Not at all"</span> <span class='op'>~</span> <span class='fl'>0</span>, <span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"Less than once a week"</span> <span class='op'>~</span> <span class='fl'>0.1</span>, <span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"About once a week"</span> <span class='op'>~</span> <span class='fl'>1</span>, <span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"Several times a week"</span> <span class='op'>~</span> <span class='fl'>3</span>, <span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"Every day (at least once a day)"</span> <span class='op'>~</span> <span class='fl'>7</span><span class='op'>)</span><span class='op'>)</span></span>
+<span><span class='va'>visit04_3</span> <span class='op'>&lt;-</span> <span class='va'>div_nev_men</span> <span class='op'>|&gt;</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>NRVISIT04</span> <span class='op'>!=</span> <span class='st'>"NA"</span> <span class='op'>&amp;</span> <span class='va'>NRVISIT04</span> <span class='op'>!=</span> <span class='st'>"Not ascertained"</span><span class='op'>)</span> <span class='op'>|&gt;</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>visit_bool_04_3 <span class='op'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/case_when.html'>case_when</a></span><span class='op'>(</span><span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"Not at all"</span> <span class='op'>~</span> <span class='fl'>0</span>, <span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"Less than once a week"</span> <span class='op'>~</span> <span class='fl'>0.3</span>, <span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"About once a week"</span> <span class='op'>~</span> <span class='fl'>1</span>, <span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"Several times a week"</span> <span class='op'>~</span> <span class='fl'>3</span>, <span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"Every day (at least once a day)"</span> <span class='op'>~</span> <span class='fl'>7</span><span class='op'>)</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>visit04_4</span> <span class='op'>&lt;-</span> <span class='va'>div_nev_men</span> <span class='op'>|&gt;</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>NRVISIT04</span> <span class='op'>!=</span> <span class='st'>"NA"</span> <span class='op'>&amp;</span> <span class='va'>NRVISIT04</span> <span class='op'>!=</span> <span class='st'>"Not ascertained"</span><span class='op'>)</span> <span class='op'>|&gt;</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>visit_bool_04_4 <span class='op'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/case_when.html'>case_when</a></span><span class='op'>(</span><span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"Not at all"</span> <span class='op'>~</span> <span class='fl'>0</span>, <span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"Less than once a week"</span> <span class='op'>~</span> <span class='fl'>0.2</span>, <span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"About once a week"</span> <span class='op'>~</span> <span class='fl'>1</span>, <span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"Several times a week"</span> <span class='op'>~</span> <span class='fl'>3</span>, <span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"Every day (at least once a day)"</span> <span class='op'>~</span> <span class='fl'>7</span><span class='op'>)</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>visit04_5</span> <span class='op'>&lt;-</span> <span class='va'>div_nev_men</span> <span class='op'>|&gt;</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>NRVISIT04</span> <span class='op'>!=</span> <span class='st'>"NA"</span> <span class='op'>&amp;</span> <span class='va'>NRVISIT04</span> <span class='op'>!=</span> <span class='st'>"Not ascertained"</span><span class='op'>)</span> <span class='op'>|&gt;</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>visit_bool_04_5 <span class='op'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/case_when.html'>case_when</a></span><span class='op'>(</span><span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"Not at all"</span> <span class='op'>~</span> <span class='fl'>0</span>, <span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"Less than once a week"</span> <span class='op'>~</span> <span class='fl'>0.1</span>, <span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"About once a week"</span> <span class='op'>~</span> <span class='fl'>1</span>, <span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"Several times a week"</span> <span class='op'>~</span> <span class='fl'>3</span>, <span class='va'>NRVISIT04</span> <span class='op'>==</span> <span class='st'>"Every day (at least once a day)"</span> <span class='op'>~</span> <span class='fl'>7</span><span class='op'>)</span><span class='op'>)</span></span>
 <span></span>
 <span><span class='co'>#Running a regression. Adding age, race, and income. </span></span>
 <span></span>
@@ -2057,6 +3343,465 @@ R2 Adj.
 (Intercept)
 </td>
 <td style="text-align:center;">
+1.981
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+s.e. = 2.908
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+p = 0.498
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+divorced_vs_never
+</td>
+<td style="text-align:center;">
+−0.250
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+s.e. = 0.703
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+p = 0.723
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+age_num
+</td>
+<td style="text-align:center;">
+−0.003
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+s.e. = 0.037
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+p = 0.938
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+raceother
+</td>
+<td style="text-align:center;">
+1.100
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+s.e. = 1.290
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+p = 0.396
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+racewhite
+</td>
+<td style="text-align:center;">
+−0.939
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+s.e. = 0.587
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+p = 0.114
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+totincr$100,000 or more
+</td>
+<td style="text-align:center;">
+1.124
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+s.e. = 2.850
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+p = 0.694
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+totincr$12,500-$14,999
+</td>
+<td style="text-align:center;">
+1.132
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+s.e. = 2.769
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+p = 0.684
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+totincr$15,000-$19,999
+</td>
+<td style="text-align:center;">
+0.846
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+s.e. = 2.909
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+p = 0.772
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+totincr$20,000-$24,999
+</td>
+<td style="text-align:center;">
+1.142
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+s.e. = 2.735
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+p = 0.677
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+totincr$25,000-$29,999
+</td>
+<td style="text-align:center;">
+0.243
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+s.e. = 2.691
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+p = 0.928
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+totincr$30,000-$34,999
+</td>
+<td style="text-align:center;">
+−0.027
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+s.e. = 2.775
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+p = 0.992
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+totincr$35,000-$39,999
+</td>
+<td style="text-align:center;">
+1.260
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+s.e. = 2.767
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+p = 0.650
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+totincr$40,000-$49,999
+</td>
+<td style="text-align:center;">
+−0.598
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+s.e. = 2.793
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+p = 0.831
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+totincr$50,000-$59,999
+</td>
+<td style="text-align:center;">
+2.810
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+s.e. = 2.685
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+p = 0.299
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+totincr$5000-$7499
+</td>
+<td style="text-align:center;">
+−0.441
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+s.e. = 2.989
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+p = 0.883
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+totincr$60,000-$74,999
+</td>
+<td style="text-align:center;">
+1.102
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+s.e. = 2.982
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+p = 0.713
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+totincr$75,000-$99,999
+</td>
+<td style="text-align:center;">
+1.593
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+s.e. = 2.798
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+p = 0.571
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+totincr$7500-$9999
+</td>
+<td style="text-align:center;">
+1.141
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+s.e. = 3.555
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+p = 0.749
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+totincrUnder $5000
+</td>
+<td style="text-align:center;">
+0.818
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:center;">
+s.e. = 2.709
+</td>
+</tr>
+<tr>
+<td style="text-align:left;box-shadow: 0px 1.5px">
+</td>
+<td style="text-align:center;box-shadow: 0px 1.5px">
+p = 0.763
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Num.Obs.
+</td>
+<td style="text-align:center;">
+95
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+R2
+</td>
+<td style="text-align:center;">
+0.217
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+R2 Adj.
+</td>
+<td style="text-align:center;">
+0.031
+</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'>modelsummary</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/modelsummary/man/modelsummary.html'>modelsummary</a></span><span class='op'>(</span><span class='va'>regression_visit04_3</span>, statistic <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"s.e. = {std.error}"</span>,</span>
+<span>                                         <span class='st'>"p = {p.value}"</span><span class='op'>)</span>, gof_map <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"nobs"</span>, <span class='st'>"r.squared"</span>, <span class='st'>"adj.r.squared"</span><span class='op'>)</span><span class='op'>)</span></span></code></pre>
+</div>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:center;">
+ (1)
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:center;">
 1.966
 </td>
 </tr>
@@ -2484,465 +4229,6 @@ R2
 </td>
 <td style="text-align:center;">
 0.217
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-R2 Adj.
-</td>
-<td style="text-align:center;">
-0.031
-</td>
-</tr>
-</tbody>
-</table>
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'>modelsummary</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/modelsummary/man/modelsummary.html'>modelsummary</a></span><span class='op'>(</span><span class='va'>regression_visit04_3</span>, statistic <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"s.e. = {std.error}"</span>,</span>
-<span>                                         <span class='st'>"p = {p.value}"</span><span class='op'>)</span>, gof_map <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"nobs"</span>, <span class='st'>"r.squared"</span>, <span class='st'>"adj.r.squared"</span><span class='op'>)</span><span class='op'>)</span></span></code></pre>
-</div>
-<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
-<thead>
-<tr>
-<th style="text-align:left;">
-</th>
-<th style="text-align:center;">
- (1)
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-(Intercept)
-</td>
-<td style="text-align:center;">
-1.935
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:center;">
-s.e. = 2.931
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:center;">
-p = 0.511
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-divorced_vs_never
-</td>
-<td style="text-align:center;">
-−0.282
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:center;">
-s.e. = 0.708
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:center;">
-p = 0.691
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-age_num
-</td>
-<td style="text-align:center;">
-−0.002
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:center;">
-s.e. = 0.037
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:center;">
-p = 0.965
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-raceother
-</td>
-<td style="text-align:center;">
-1.111
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:center;">
-s.e. = 1.300
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:center;">
-p = 0.396
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-racewhite
-</td>
-<td style="text-align:center;">
-−0.938
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:center;">
-s.e. = 0.592
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:center;">
-p = 0.117
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-totincr$100,000 or more
-</td>
-<td style="text-align:center;">
-1.136
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:center;">
-s.e. = 2.873
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:center;">
-p = 0.694
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-totincr$12,500-$14,999
-</td>
-<td style="text-align:center;">
-1.144
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:center;">
-s.e. = 2.791
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:center;">
-p = 0.683
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-totincr$15,000-$19,999
-</td>
-<td style="text-align:center;">
-0.858
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:center;">
-s.e. = 2.933
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:center;">
-p = 0.771
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-totincr$20,000-$24,999
-</td>
-<td style="text-align:center;">
-1.154
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:center;">
-s.e. = 2.757
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:center;">
-p = 0.677
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-totincr$25,000-$29,999
-</td>
-<td style="text-align:center;">
-0.228
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:center;">
-s.e. = 2.713
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:center;">
-p = 0.933
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-totincr$30,000-$34,999
-</td>
-<td style="text-align:center;">
-−0.094
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:center;">
-s.e. = 2.798
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:center;">
-p = 0.973
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-totincr$35,000-$39,999
-</td>
-<td style="text-align:center;">
-1.232
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:center;">
-s.e. = 2.790
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:center;">
-p = 0.660
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-totincr$40,000-$49,999
-</td>
-<td style="text-align:center;">
-−0.586
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:center;">
-s.e. = 2.816
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:center;">
-p = 0.836
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-totincr$50,000-$59,999
-</td>
-<td style="text-align:center;">
-2.803
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:center;">
-s.e. = 2.706
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:center;">
-p = 0.304
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-totincr$5000-$7499
-</td>
-<td style="text-align:center;">
-−0.527
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:center;">
-s.e. = 3.013
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:center;">
-p = 0.862
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-totincr$60,000-$74,999
-</td>
-<td style="text-align:center;">
-1.112
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:center;">
-s.e. = 3.006
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:center;">
-p = 0.712
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-totincr$75,000-$99,999
-</td>
-<td style="text-align:center;">
-1.601
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:center;">
-s.e. = 2.821
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:center;">
-p = 0.572
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-totincr$7500-$9999
-</td>
-<td style="text-align:center;">
-1.134
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:center;">
-s.e. = 3.584
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:center;">
-p = 0.753
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-totincrUnder $5000
-</td>
-<td style="text-align:center;">
-0.828
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-</td>
-<td style="text-align:center;">
-s.e. = 2.730
-</td>
-</tr>
-<tr>
-<td style="text-align:left;box-shadow: 0px 1.5px">
-</td>
-<td style="text-align:center;box-shadow: 0px 1.5px">
-p = 0.763
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Num.Obs.
-</td>
-<td style="text-align:center;">
-95
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-R2
-</td>
-<td style="text-align:center;">
-0.216
 </td>
 </tr>
 <tr>
@@ -3890,17 +5176,17 @@ R2 Adj.
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='va'>regression_satvis04</span>, <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>divorced_vs_never</span>, y <span class='op'>=</span> <span class='va'>sat_adjust04</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='op'>(</span>title <span class='op'>=</span> <span class='st'>"Regression"</span><span class='op'>)</span></span></code></pre>
 </div>
-<img src="index_files/figure-html5/unnamed-chunk-4-1.png" width="624" />
+<img src="index_files/figure-html5/unnamed-chunk-12-1.png" width="624" />
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'>#visualizing the dependent variable</span></span>
 <span></span>
 <span><span class='va'>satvis04</span> <span class='op'>|&gt;</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x<span class='op'>=</span><span class='va'>sat_adjust04</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_histogram.html'>geom_histogram</a></span><span class='op'>(</span><span class='op'>)</span></span></code></pre>
 </div>
-<img src="index_files/figure-html5/unnamed-chunk-4-2.png" width="624" />
+<img src="index_files/figure-html5/unnamed-chunk-12-2.png" width="624" />
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>satvis04</span> <span class='op'>|&gt;</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>divorced_vs_never</span> <span class='op'>==</span> <span class='fl'>0</span><span class='op'>)</span> <span class='op'>|&gt;</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x<span class='op'>=</span><span class='va'>sat_adjust04</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_histogram.html'>geom_histogram</a></span><span class='op'>(</span><span class='op'>)</span></span></code></pre>
 </div>
-<img src="index_files/figure-html5/unnamed-chunk-4-3.png" width="624" />
+<img src="index_files/figure-html5/unnamed-chunk-12-3.png" width="624" />
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'>##NRSATVIS518</span></span>
 <span></span>
@@ -4387,7 +5673,7 @@ R2 Adj.
 <span></span>
 <span><span class='va'>visualize_satvis04</span> <span class='op'>|&gt;</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>div_stat</span>, y <span class='op'>=</span> <span class='va'>sat_adjust04</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_boxplot.html'>geom_boxplot</a></span><span class='op'>(</span><span class='op'>)</span></span></code></pre>
 </div>
-<img src="index_files/figure-html5/unnamed-chunk-4-4.png" width="624" />
+<img src="index_files/figure-html5/unnamed-chunk-12-4.png" width="624" />
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>ate_satvis04</span> <span class='op'>&lt;-</span> <span class='va'>satvis04</span> <span class='op'>|&gt;</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>div_stat <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/ifelse.html'>ifelse</a></span><span class='op'>(</span><span class='va'>divorced_vs_never</span> <span class='op'>==</span> <span class='fl'>1</span>, <span class='st'>"Divorced"</span>, <span class='st'>"Never Married"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>|&gt;</span> <span class='fu'><a href='https://infer.tidymodels.org/reference/specify.html'>specify</a></span><span class='op'>(</span><span class='va'>sat_adjust04</span> <span class='op'>~</span> <span class='va'>div_stat</span><span class='op'>)</span> <span class='op'>|&gt;</span> <span class='fu'><a href='https://infer.tidymodels.org/reference/generate.html'>generate</a></span><span class='op'>(</span>reps <span class='op'>=</span> <span class='fl'>1000</span>, type <span class='op'>=</span> <span class='st'>"bootstrap"</span><span class='op'>)</span> <span class='op'>|&gt;</span> <span class='fu'><a href='https://infer.tidymodels.org/reference/calculate.html'>calculate</a></span><span class='op'>(</span>stat <span class='op'>=</span> <span class='st'>"diff in means"</span>, order <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Divorced"</span>,<span class='st'>"Never Married"</span><span class='op'>)</span><span class='op'>)</span></span>
 <span></span>
@@ -4398,16 +5684,16 @@ R2 Adj.
 <pre><code># A tibble: 1 × 2
   lower_ci upper_ci
      &lt;dbl&gt;    &lt;dbl&gt;
-1    -3.37   -0.271</code></pre>
+1    -3.25   -0.142</code></pre>
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://infer.tidymodels.org/reference/visualize.html'>visualize</a></span><span class='op'>(</span><span class='va'>ate_satvis04</span><span class='op'>)</span></span></code></pre>
 </div>
-<img src="index_files/figure-html5/unnamed-chunk-4-5.png" width="624" />
+<img src="index_files/figure-html5/unnamed-chunk-12-5.png" width="624" />
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>ate_satvis04_se</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/sd.html'>sd</a></span><span class='op'>(</span><span class='va'>ate_satvis04</span><span class='op'>$</span><span class='va'>stat</span><span class='op'>)</span></span>
 <span><span class='va'>ate_satvis04_se</span> <span class='co'>#0.983</span></span></code></pre>
 </div>
-<pre><code>[1] 0.9361703</code></pre>
+<pre><code>[1] 0.9376732</code></pre>
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'>#The s.e. on the no-controls regression is 0.930</span></span>
 <span><span class='co'>#The s.e. on the regression with controls is 1.108. So that is one limitation of the model, the standard error increases and the adjusted R^2 decreases but the effect is larger and the p-value decreases. Overall I'd value the higher statistical significance more and so would point to the regression with controls as the most useful analysis here. </span></span></code></pre>
@@ -4495,7 +5781,7 @@ F-statistic: 0.4212 on 1 and 174 DF,  p-value: 0.5172</code></pre>
 </div>
 <h1 id="milestone-3-data-visualization">Milestone 3: Data Visualization</h1>
 <div class="layout-chunk" data-layout="l-body">
-<p><img src="index_files/figure-html5/unnamed-chunk-6-1.png" width="1440" /></p>
+<p><img src="index_files/figure-html5/unnamed-chunk-14-1.png" width="1440" /></p>
 </div>
 <h1 id="data-source">Data Source</h1>
 <p>My dataset is the CDC’s National Survey of Family Growth (NSFG), conducted between 2017 and 2019. The specific data I’m looking at is an independent sample of men aged 15-49.</p>
